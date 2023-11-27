@@ -17,6 +17,7 @@ namespace Test.DogTests.QueryTest
             _handler = new GetDogByIdQueryHandler(_mockDatabase);
         }
 
+        // GetDogById
         [Test]
         public async Task Handle_ValidId_ReturnsCorrectDog()
         {
@@ -32,7 +33,7 @@ namespace Test.DogTests.QueryTest
             Assert.NotNull(result);
             Assert.That(result.Id, Is.EqualTo(dogId));
         }
-
+        // GetDogById
         [Test]
         public async Task Handle_InvalidId_ReturnsNull()
         {

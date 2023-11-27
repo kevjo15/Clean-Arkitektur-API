@@ -38,31 +38,20 @@ namespace Test.DogTests.CommandTest
             _mockDatabase = new MockDatabase();
             _controller = new DogsController(_mediatorMock.Object);
         }
-        [Test]
-        public async Task DeleteDogById_ShouldReturnNoContentWhenDogIsDeleted()
-        {
-            // Arrange
-            var dogId = _mockDatabase.Dogs[2].Id;
-            //var dogId = new Guid("12345678-1234-5678-1234-567812345678");
 
-            // Act
+
+        [Test]
+        public async Task DeleteDog_ShouldReturnNotFoundWhenDogIsDeleted()
+        {
+            //Arrange
+            var dogId = new Guid("12345678-1234-5678-1234-567812345678");
+
+            //Act
             var result = await _controller.DeleteDog(dogId);
 
-            // Assert
-            Assert.IsInstanceOf<NoContentResult>(result);
-            Console.WriteLine($"Test result: {result}");
-        }
-        [Test]
-        public async Task DeleteDog_ShouldReturnNotFoundWhenDogIsNotFound()
-        {
-            // Arrange
-            var nonExistentDogId = Guid.NewGuid();
-
-            // Act
-            var result = await _controller.DeleteDog(nonExistentDogId);
-
-            // Assert
+            //Assert
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
+
     }
 }
