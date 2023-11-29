@@ -30,11 +30,8 @@ namespace Test.CatTests.CommandTest
             var initialCat = new Cat { Id = Guid.NewGuid(), Name = "InitialCatName" };
             _mockDatabase.Cats.Add(initialCat);
 
-            //skapar en instans av updatedog
-            var command = new UpdateCatByIdCommand(
-                updatedCat: new CatDto { Name = "UpdatedCatName" },
-                id: initialCat.Id
-            );
+            //skapar en instans av updateCat
+            var command = new UpdateCatByIdCommand( updatedCat: new CatDto { Name = "UpdatedCatName" }, id: initialCat.Id, likesToPlay: false);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
