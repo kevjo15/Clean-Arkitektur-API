@@ -1,6 +1,5 @@
 ﻿using API.Controllers.DogsController;
 using Application.Commands.Dogs.DeleteDog;
-using Application.Queries.Dogs.GetById;
 using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
@@ -44,7 +43,7 @@ namespace Test.DogTests.CommandTest
         public async Task DeleteDog_ShouldReturnNotFoundWhenDogIsDeleted()
         {
             //Arrange
-            var dogId = new Guid("12345678-1234-5678-1234-567812345678");
+            var dogId = new Guid("12345678-1234-5678-1234-567812345679");
 
             //Act
             var result = await _controller.DeleteDog(dogId);
