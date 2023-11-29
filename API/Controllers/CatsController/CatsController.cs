@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Application.Dtos;
-using Application.Commands.Cats;
 using MediatR;
-using Application.Queries.Dogs.GetAll;
 using Application.Queries.Cats.GetAll;
-using Application.Queries.Dogs.GetById;
 using Application.Queries.Cats.GetById;
-using Application.Commands.Dogs;
 using Application.Commands.Cats.AddCat;
-using Application.Commands.Dogs.UpdateDog;
 using Application.Commands.Cats.UpdateCat;
-using Application.Commands.Dogs.DeleteDog;
 using Application.Commands.Cats.DeleteCat;
 
 namespace API.Controllers.CatsController
@@ -56,7 +49,7 @@ namespace API.Controllers.CatsController
         [Route("updateCat/{updatedCatId}")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
-            return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId)));
+            return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId, updatedCat.LikesToPlay)));
         }
 
         // Deletes specific dog
