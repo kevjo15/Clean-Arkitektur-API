@@ -9,6 +9,19 @@ namespace Infrastructure.Database
             get { return allDogs; }
             set { allDogs = value; }
         }
+        public List<Cat> Cats
+        {
+            get { return allCats; }
+            set { allCats = value; }
+        }
+        private static List<Cat> allCats = new()
+        {
+            new Cat { Id = Guid.NewGuid(), Name = "Nemo"},
+            new Cat { Id = Guid.NewGuid(), Name = "Doris"},
+            new Cat { Id = Guid.NewGuid(), Name = "Simba"},
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345677"), Name = "TestCatForUnitTests"},
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345675"), Name = "TestCatForDelete"}
+        };
 
         private static List<Dog> allDogs = new()
         {
@@ -16,7 +29,7 @@ namespace Infrastructure.Database
             new Dog { Id = Guid.NewGuid(), Name = "Patrik"},
             new Dog { Id = Guid.NewGuid(), Name = "Alfred"},
             new Dog { Id = new Guid("12345678-1234-5678-1234-567812345678"), Name = "TestDogForUnitTests"},
-            new Dog { Id = new Guid("12345678-1234-5678-1234-567812345679"), Name = "TestDogForUnitTests2"}
+            new Dog { Id = new Guid("12345678-1234-5678-1234-567812345679"), Name = "TestDogForDelete"}
         };
     }
 }
