@@ -13,7 +13,7 @@ namespace Application.Commands.Cats.DeleteCat
     {
         private readonly MockDatabase _mockDatabase;
 
-        public DeleteCatByIdCommandHandler(MockDatabase mockDatabase) 
+        public DeleteCatByIdCommandHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

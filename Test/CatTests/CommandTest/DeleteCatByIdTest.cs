@@ -30,8 +30,8 @@ namespace Test.CatTests.CommandTest
             _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteCatByIdCommand>(), default(CancellationToken)))
              .Returns(Task.FromResult((Cat)null));
 
-         //   _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteCatByIdCommand>(), default(CancellationToken)))
-         //.ReturnsAsync(new Cat());
+            //   _mediatorMock.Setup(m => m.Send(It.IsAny<DeleteCatByIdCommand>(), default(CancellationToken)))
+            //.ReturnsAsync(new Cat());
 
 
             // Initialize the handler and mock database before each test

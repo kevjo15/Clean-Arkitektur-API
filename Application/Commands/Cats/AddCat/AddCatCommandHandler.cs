@@ -13,11 +13,11 @@ namespace Application.Commands.Cats.AddCat
     {
         private readonly MockDatabase _mockDatabase;
 
-        public AddCatCommandHandler(MockDatabase mockDatabase) 
+        public AddCatCommandHandler(MockDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }
-        public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken) 
+        public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
         {
             Cat CatToCreate = new()
             {

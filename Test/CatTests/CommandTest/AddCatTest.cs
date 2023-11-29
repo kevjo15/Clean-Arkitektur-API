@@ -5,13 +5,13 @@ using Infrastructure.Database;
 namespace Test.CatTests.CommandTest
 {
     [TestFixture]
-    public class AddCatTest 
+    public class AddCatTest
     {
         private MockDatabase _mockDatabase;
         private AddCatCommandHandler _handler;
 
         [SetUp]
-        public void SetUp() 
+        public void SetUp()
         {
             _mockDatabase = new MockDatabase();
             _handler = new AddCatCommandHandler(_mockDatabase);
