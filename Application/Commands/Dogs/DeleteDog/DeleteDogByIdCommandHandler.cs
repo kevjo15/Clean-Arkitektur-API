@@ -1,13 +1,6 @@
-﻿using Application.Commands.Dogs.UpdateDog;
-using Application.Queries.Dogs.GetById;
-using Domain.Models;
+﻿using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Commands.Dogs.DeleteDog
 {
@@ -25,7 +18,16 @@ namespace Application.Commands.Dogs.DeleteDog
             // Hitta hunden att ta bort från databasen
             var dogToDelete = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id);
 
-            _mockDatabase.Dogs.Remove(dogToDelete);
+            if (dogToDelete != null)
+            {
+                _mockDatabase.Dogs.Remove(dogToDelete);
+            }
+            else
+            {
+                // Throw an exception or handle the null case as needed for your application
+                throw new InvalidOperationException("No bird with the given ID was found.");
+            }
+
 
             return Task.FromResult(dogToDelete);
 

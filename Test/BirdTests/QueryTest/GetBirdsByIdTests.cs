@@ -1,12 +1,12 @@
-﻿using Application.Queries.Cats.GetById;
+﻿using Application.Queries.Birds.GetById;
 using Infrastructure.Database;
 
-namespace Test.CatTests.QueryTest
+namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
-    public class GetCatByIdTests
+    public class GetBirdsByIdTests
     {
-        private GetCatByIdQueryHandler _handler;
+        private GetBirdByIdQueryHandler _handler;
         private MockDatabase _mockDatabase;
 
         [SetUp]
@@ -14,33 +14,33 @@ namespace Test.CatTests.QueryTest
         {
             // Initialize the handler and mock database before each test
             _mockDatabase = new MockDatabase();
-            _handler = new GetCatByIdQueryHandler(_mockDatabase);
+            _handler = new GetBirdByIdQueryHandler(_mockDatabase);
         }
 
-        // GetCatById
+        // GetBirdById
         [Test]
-        public async Task Handle_ValidId_ReturnsCorrectCat()
+        public async Task Handle_ValidId_ReturnsCorrectBird()
         {
             // Arrange
-            var catId = new Guid("12345678-1234-5678-1234-567812345677");
+            var birdId = new Guid("12345678-1234-5678-1234-567812345611");
 
-            var query = new GetCatByIdQuery(catId);
+            var query = new GetBirdByIdQuery(birdId);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
-            Assert.That(result.Id, Is.EqualTo(catId));
+            Assert.That(result.Id, Is.EqualTo(birdId));
         }
-        // GetDogById
+        // GetBirdById
         [Test]
         public async Task Handle_InvalidId_ReturnsNull()
         {
             // Arrange
-            var invalidCatId = Guid.NewGuid();
+            var invalidBirdId = Guid.NewGuid();
 
-            var query = new GetCatByIdQuery(invalidCatId);
+            var query = new GetBirdByIdQuery(invalidBirdId);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
