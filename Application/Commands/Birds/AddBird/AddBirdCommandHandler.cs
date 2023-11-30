@@ -12,7 +12,7 @@ namespace Application.Commands.Birds.AddBird
         {
             _mockDatabase = mockDatabase;
         }
-        public Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken) 
+        public Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken)
         {
             Bird BirdToCreate = new()
             {
