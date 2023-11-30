@@ -1,11 +1,6 @@
 ﻿using Application.Commands.Dogs;
 using Application.Dtos;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.DogTests.CommandTest
 {

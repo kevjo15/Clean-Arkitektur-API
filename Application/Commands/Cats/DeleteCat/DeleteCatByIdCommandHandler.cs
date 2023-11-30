@@ -1,10 +1,6 @@
 ﻿using Domain.Models;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Infrastructure.Database;
 
 namespace Application.Commands.Cats.DeleteCat
@@ -22,7 +18,16 @@ namespace Application.Commands.Cats.DeleteCat
         {
             var catToDelete = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == request.Id);
 
-            _mockDatabase.Cats.Remove(catToDelete);
+            if (catToDelete != null)
+            {
+                _mockDatabase.Cats.Remove(catToDelete);
+            }
+            else
+            {
+                // Throw an exception or handle the null case as needed for your application
+                throw new InvalidOperationException("No cat with the given ID was found.");
+            }
+
 
             return Task.FromResult(catToDelete);
         }

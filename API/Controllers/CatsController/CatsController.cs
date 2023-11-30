@@ -52,7 +52,7 @@ namespace API.Controllers.CatsController
             return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId, updatedCat.LikesToPlay)));
         }
 
-        // Deletes specific dog
+        // Deletes specific cat
         [HttpDelete]
         [Route("deletecat/{Id}")]
         public async Task<IActionResult> DeleteCat(Guid Id)
@@ -62,10 +62,10 @@ namespace API.Controllers.CatsController
 
             if (result != null)
             {
-                return NoContent(); // Om borttagningsoperationen lyckades, returnera information om borttagen hund
+                return NoContent(); // Om borttagningsoperationen lyckades, returnera information om borttagen katt
             }
 
-            return NotFound("Cat Finns inte med i listan"); // Om hunden inte hittades, returnera NotFound
+            return NotFound("Cat Finns inte med i listan"); // Om katten inte hittades, returnera NotFound
 
         }
     }

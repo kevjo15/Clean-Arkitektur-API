@@ -1,13 +1,7 @@
 ﻿using Application.Commands.Cats.UpdateCat;
-using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Domain.Models;
 using Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test.CatTests.CommandTest
 {
@@ -31,7 +25,7 @@ namespace Test.CatTests.CommandTest
             _mockDatabase.Cats.Add(initialCat);
 
             //skapar en instans av updateCat
-            var command = new UpdateCatByIdCommand( updatedCat: new CatDto { Name = "UpdatedCatName" }, id: initialCat.Id, likesToPlay: false);
+            var command = new UpdateCatByIdCommand(updatedCat: new CatDto { Name = "UpdatedCatName" }, id: initialCat.Id, likesToPlay: false);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

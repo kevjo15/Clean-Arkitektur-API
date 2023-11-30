@@ -67,7 +67,7 @@ namespace API.Controllers.DogsController
                 return NoContent(); // Om borttagningsoperationen lyckades, returnera information om borttagen hund
             }
 
-            return NotFound(); // Om hunden inte hittades, returnera NotFound
+            return NotFound("Dog Finns inte med i listan"); // Om hunden inte hittades, returnera NotFound
 
         }
     }
