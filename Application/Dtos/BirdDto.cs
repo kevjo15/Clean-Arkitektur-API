@@ -2,8 +2,9 @@
 
 namespace Application.Dtos
 {
-    public class DogDto
+    public class BirdDto
     {
         public string Name { get; set; } = string.Empty;
+        public bool CanFly { get; set; }
     }
 }
