@@ -4,6 +4,7 @@ using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAll;
 using Application.Queries.Dogs.GetById;
+using Application.Validators.Dog;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,14 @@ namespace API.Controllers.DogsController
     public class DogsController : ControllerBase
     {
         internal readonly IMediator _mediator;
-        public DogsController(IMediator mediator)
+        private readonly DogValidator _dogValidator;
+        private readonly GuidValidator _guidValidator;
+
+        public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
+            _dogValidator = dogValidator;
+            _guidValidator = guidValidator;
         }
 
         // Get all dogs from database
@@ -35,7 +41,20 @@ namespace API.Controllers.DogsController
         [Route("getDogById/{dogId}")]
         public async Task<IActionResult> GetDogById(Guid dogId)
         {
-            return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
+            var validatedDog = _guidValidator.Validate(dogId);
+            //Error handling
+            if (!validatedDog.IsValid)
+            {
+                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            try
+            {
+                return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
+            }
+            catch (Exception ex) 
+            { 
+                throw new Exception(ex.Message);
+            }
         }
 
         // Create a new dog 
@@ -43,7 +62,25 @@ namespace API.Controllers.DogsController
         [Route("addNewDog")]
         public async Task<IActionResult> AddDog([FromBody] DogDto newDog)
         {
-            return Ok(await _mediator.Send(new AddDogCommand(newDog)));
+            //Validate Dog
+            var validatedDog = _dogValidator.Validate(newDog);
+
+            //Error handling
+            if(!validatedDog.IsValid) 
+            {
+                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
+
+            }
+
+            try
+            {
+                return Ok(await _mediator.Send(new AddDogCommand(newDog)));
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // Update a specific dog
@@ -51,7 +88,26 @@ namespace API.Controllers.DogsController
         [Route("updateDog/{updatedDogId}")]
         public async Task<IActionResult> UpdateDog([FromBody] DogDto updatedDog, Guid updatedDogId)
         {
-            return Ok(await _mediator.Send(new UpdateDogByIdCommand(updatedDog, updatedDogId)));
+            var validatedDog = _dogValidator.Validate(updatedDog);
+            var guidValidator = _guidValidator.Validate(updatedDogId);
+
+            if (!validatedDog.IsValid)
+            {
+                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            if (!guidValidator.IsValid)
+            {
+                return BadRequest(guidValidator.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
+            try
+            {
+                return Ok(await _mediator.Send(new UpdateDogByIdCommand(updatedDog, updatedDogId)));
+
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // IMPLEMENT DELETE !!!
