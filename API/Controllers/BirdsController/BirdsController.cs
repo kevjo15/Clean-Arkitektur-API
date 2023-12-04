@@ -48,7 +48,7 @@ namespace API.Controllers.BirdsController
         [Route("updateBird/{updatedBirdId}")]
         public async Task<IActionResult> UpdateBird([FromBody] BirdDto updatedBird, Guid updatedBirdId)
         {
-            return Ok(await _mediator.Send(new UpdateBirdByIdCommand(updatedBird, updatedBirdId, updatedBird.CanFly)));
+            return Ok(await _mediator.Send(new UpdateBirdByIdCommand(updatedBird, updatedBirdId)));
         }
 
         // Deletes specific Bird
