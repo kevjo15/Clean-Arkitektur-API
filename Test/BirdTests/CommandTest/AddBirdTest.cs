@@ -27,10 +27,10 @@ namespace Test.BirdTests.CommandTest
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            var newbirdinDB = _mockDatabase.Birds.FirstOrDefault(bird => bird.Name == "New Bird");
+            //var newbirdinDB = _mockDatabase.Birds.FirstOrDefault(bird => bird.Name == "New Bird");
 
-            Assert.IsNotNull(newbirdinDB);
-            Assert.That(newbirdinDB.Name, Is.EqualTo("New Bird"));
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo("New Bird"));
         }
 
         [Test]

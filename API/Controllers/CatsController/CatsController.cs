@@ -49,7 +49,7 @@ namespace API.Controllers.CatsController
         [Route("updateCat/{updatedCatId}")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
-            return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId, updatedCat.LikesToPlay)));
+            return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId)));
         }
 
         // Deletes specific cat

@@ -25,7 +25,7 @@ namespace Test.BirdTests.CommandTest
             _mockDatabase.Birds.Add(initialBird);
 
             //skapar en instans av updateBird
-            var command = new UpdateBirdByIdCommand(updatedBird: new BirdDto { Name = "UpdatedBirdName" }, id: initialBird.Id, canFly: false);
+            var command = new UpdateBirdByIdCommand(updatedBird: new BirdDto { Name = "UpdatedBirdName" }, id: initialBird.Id);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

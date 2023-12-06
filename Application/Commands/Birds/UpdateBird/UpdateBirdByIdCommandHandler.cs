@@ -15,16 +15,14 @@ namespace Application.Commands.Birds.UpdateBird
         {
             Bird birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
 
-            if (birdToUpdate != null)
+            if (birdToUpdate == null)
             {
-                birdToUpdate.Name = request.UpdatedBird.Name;
-
-                if (request.CanFly.HasValue)
-                {
-                    birdToUpdate.CanFly = request.CanFly.Value;
-                }
+                return Task.FromResult<Bird>(null!);
             }
-            return Task.FromResult(birdToUpdate)!;
+            birdToUpdate.Name = request.UpdatedBird.Name;
+            birdToUpdate.CanFly = request.UpdatedBird.CanFly;
+
+            return Task.FromResult(birdToUpdate);
         }
     }
 }

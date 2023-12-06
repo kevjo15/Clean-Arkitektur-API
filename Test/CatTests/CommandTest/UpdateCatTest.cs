@@ -42,5 +42,38 @@ namespace Test.CatTests.CommandTest
             Assert.That(updatedCatInDatabase, Is.Not.Null);
             Assert.That(updatedCatInDatabase.Name, Is.EqualTo("UpdatedCatName"));
         }
+        [Test]
+        public async Task Handle_Update_Correct_Cat_By_Id()
+        {
+            // Arrange
+            var catId = new Guid("12345678-1234-5678-1234-567812345601");
+            var catName = "Börje";
+            var dto = new CatDto { Name = catName, LikesToPlay = false };
+            var command = new UpdateCatByIdCommand(dto, catId);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.That(result.Name, Is.EqualTo(catName));
+            Assert.IsFalse(result.LikesToPlay);
+        }
+        [Test]
+        public async Task Handle_Update_Correct_Cat_By_Id()
+        {
+            // Arrange
+            var catId = new Guid("12345678-1234-5678-1234-567812345601");
+            var catName = "Åke";
+
+            var command = new UpdateCatByIdCommand(new CatDto { Name = catName, LikesToPlay = false }, catId);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(catName, result.Name);
+            Assert.IsFalse(result.LikesToPlay);
+        }
+
     }
 }
