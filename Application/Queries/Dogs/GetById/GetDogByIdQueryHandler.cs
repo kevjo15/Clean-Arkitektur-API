@@ -17,11 +17,20 @@ namespace Application.Queries.Dogs.GetById
         {
             Dog wantedDog = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id)!;
 
-            if (wantedDog == null)
+            try
             {
-                return Task.FromResult<Dog>(null!);
+                if (wantedDog == null)
+                {
+                    return Task.FromResult<Dog>(null!);
+                }
+                return Task.FromResult(wantedDog);
+
             }
-            return Task.FromResult(wantedDog);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
     }
 }
