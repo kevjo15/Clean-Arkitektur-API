@@ -25,6 +25,7 @@ namespace Infrastructure.Database
             new Bird { Id = Guid.NewGuid(), Name = "Simon"},
             new Bird { Id = Guid.NewGuid(), Name = "Gustav"},
             new Bird { Id = new Guid("12345678-1234-5678-1234-567812345611"), Name = "TestBirdForUnitTests"},
+            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345614"), Name = "TestBirdForUnitTestsUpdate"},
             new Bird { Id = new Guid("12345678-1234-5678-1234-567812345612"), Name = "TestBirdForDelete"}
         };
         private static List<Cat> allCats = new()

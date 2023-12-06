@@ -18,11 +18,12 @@ namespace Application.Commands.Birds.UpdateBird
             if (birdToUpdate != null)
             {
                 birdToUpdate.Name = request.UpdatedBird.Name;
+                birdToUpdate.CanFly = request.UpdatedBird.CanFly;
 
-                if (request.CanFly.HasValue)
-                {
-                    birdToUpdate.CanFly = request.CanFly.Value;
-                }
+                //if (request.CanFly.HasValue)
+                //{
+                //    birdToUpdate.CanFly = request.CanFly.Value;
+                //}
             }
             return Task.FromResult(birdToUpdate)!;
         }
