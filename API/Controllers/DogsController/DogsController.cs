@@ -51,8 +51,8 @@ namespace API.Controllers.DogsController
             {
                 return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 throw new Exception(ex.Message);
             }
         }
@@ -66,7 +66,7 @@ namespace API.Controllers.DogsController
             var validatedDog = _dogValidator.Validate(newDog);
 
             //Error handling
-            if(!validatedDog.IsValid) 
+            if (!validatedDog.IsValid)
             {
                 return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
 
@@ -104,7 +104,7 @@ namespace API.Controllers.DogsController
                 return Ok(await _mediator.Send(new UpdateDogByIdCommand(updatedDog, updatedDogId)));
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

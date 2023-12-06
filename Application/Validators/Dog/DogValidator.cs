@@ -11,7 +11,7 @@ namespace Application.Validators.Dog
 {
     public class DogValidator : AbstractValidator<DogDto>
     {
-        public DogValidator() 
+        public DogValidator()
         {
             RuleFor(Dog => Dog.Name)
                 .NotEmpty().WithMessage("Dog name can not be empty!")

@@ -34,6 +34,7 @@ namespace Test.BirdTests.CommandTest
             Assert.NotNull(result);
             Assert.IsInstanceOf<Bird>(result);
             Assert.That(result.Name, Is.EqualTo(birdToUpdate.Name));
+            Assert.That(result.CanFly = false, Is.False);
 
         }
     }

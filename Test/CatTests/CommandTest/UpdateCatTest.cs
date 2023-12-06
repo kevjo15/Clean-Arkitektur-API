@@ -23,7 +23,7 @@ namespace Test.CatTests.CommandTest
             // Arrange
             var catId = new Guid("12345678-1234-5678-1234-567812345613");
             var catToUpdate = new CatDto { Name = "UpdatedCatName", LikesToPlay = true };
-            
+
             //skapar en instans av updateCat
             var command = new UpdateCatByIdCommand(catToUpdate, catId);
 
