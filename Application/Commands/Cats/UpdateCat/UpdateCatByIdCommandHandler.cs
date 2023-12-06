@@ -21,12 +21,7 @@ namespace Application.Commands.Cats.UpdateCat
             if (catToUpdate != null)
             {
                 catToUpdate.Name = request.UpdatedCat.Name;
-
-
-                if (request.LikesToPlay.HasValue)
-                {
-                    catToUpdate.LikesToPlay = request.LikesToPlay.Value;
-                }
+                catToUpdate.LikesToPlay = request.UpdatedCat.LikesToPlay;
             }
 
             return Task.FromResult(catToUpdate)!;

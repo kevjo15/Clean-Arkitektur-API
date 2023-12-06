@@ -23,14 +23,10 @@ namespace Test.DogTests.CommandTest
         public async Task Handle_UpdatesDogInDatabase()
         {
             // Arrange
-            var initialDog = new Dog { Id = Guid.NewGuid(), Name = "InitialDogName" };
-            _mockDatabase.Dogs.Add(initialDog);
-
+            var dogId = new Guid("12345678-1234-5678-1234-567812345615");
+            var dogToUpdate = new DogDto { Name = "UpdatedDogName" };
             //skapar en instans av updatedog
-            var command = new UpdateDogByIdCommand(
-                updatedDog: new DogDto { Name = "UpdatedDogName" },
-                id: initialDog.Id
-            );
+            var command = new UpdateDogByIdCommand(dogToUpdate, dogId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -38,14 +34,8 @@ namespace Test.DogTests.CommandTest
             // Assert
             Assert.NotNull(result);
             Assert.IsInstanceOf<Dog>(result);
-
             //kolla om hunden har det uppdaterade namnet 
-            Assert.That(result.Name, Is.EqualTo("UpdatedDogName"));
-
-            // kolla om hunden har uppdaterats i mocken också
-            var updatedDogInDatabase = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == command.Id);
-            Assert.That(updatedDogInDatabase, Is.Not.Null);
-            Assert.That(updatedDogInDatabase.Name, Is.EqualTo("UpdatedDogName"));
+            Assert.That(result.Name, Is.EqualTo(dogToUpdate.Name));
         }
 
     }

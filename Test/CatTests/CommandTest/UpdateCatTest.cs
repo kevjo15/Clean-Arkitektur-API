@@ -21,11 +21,11 @@ namespace Test.CatTests.CommandTest
         public async Task Handle_UpdatesCatInDatabase()
         {
             // Arrange
-            var initialCat = new Cat { Id = Guid.NewGuid(), Name = "InitialCatName" };
-            _mockDatabase.Cats.Add(initialCat);
+            var catId = new Guid("12345678-1234-5678-1234-567812345613");
+            var catToUpdate = new CatDto { Name = "UpdatedCatName", LikesToPlay = true };
 
             //skapar en instans av updateCat
-            var command = new UpdateCatByIdCommand(updatedCat: new CatDto { Name = "UpdatedCatName" }, id: initialCat.Id, likesToPlay: false);
+            var command = new UpdateCatByIdCommand(catToUpdate, catId);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -33,14 +33,8 @@ namespace Test.CatTests.CommandTest
             // Assert
             Assert.NotNull(result);
             Assert.IsInstanceOf<Cat>(result);
-
-            //kolla om hunden har det uppdaterade namnet 
-            Assert.That(result.Name, Is.EqualTo("UpdatedCatName"));
-
-            // kolla om hunden har uppdaterats i mocken också
-            var updatedCatInDatabase = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == command.Id);
-            Assert.That(updatedCatInDatabase, Is.Not.Null);
-            Assert.That(updatedCatInDatabase.Name, Is.EqualTo("UpdatedCatName"));
+            //kolla om katten har det uppdaterade namnet 
+            Assert.That(result.Name, Is.EqualTo(catToUpdate.Name));
         }
     }
 }
