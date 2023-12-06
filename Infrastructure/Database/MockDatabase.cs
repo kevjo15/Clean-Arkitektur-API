@@ -21,20 +21,21 @@ namespace Infrastructure.Database
         }
         private static List<Bird> allBirds = new()
         {
-            new Bird { Id = Guid.NewGuid(), Name = "Drake"},
-            new Bird { Id = Guid.NewGuid(), Name = "Simon"},
-            new Bird { Id = Guid.NewGuid(), Name = "Gustav"},
-            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345611"), Name = "TestBirdForUnitTests"},
-            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345614"), Name = "TestBirdForUnitTestsUpdate"},
-            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345612"), Name = "TestBirdForDelete"}
+            new Bird { Id = Guid.NewGuid(), Name = "Drake", CanFly = false },
+            new Bird { Id = Guid.NewGuid(), Name = "Simon", CanFly = false },
+            new Bird { Id = Guid.NewGuid(), Name = "Gustav", CanFly = false },
+            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345611"), Name = "TestBirdForUnitTests", CanFly = false },
+            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345614"), Name = "UpdatedBirdName", CanFly = false },
+            new Bird { Id = new Guid("12345678-1234-5678-1234-567812345612"), Name = "TestBirdForDelete", CanFly = false }
         };
         private static List<Cat> allCats = new()
         {
-            new Cat { Id = Guid.NewGuid(), Name = "Nemo"},
-            new Cat { Id = Guid.NewGuid(), Name = "Doris"},
-            new Cat { Id = Guid.NewGuid(), Name = "Simba"},
-            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345677"), Name = "TestCatForUnitTests"},
-            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345675"), Name = "TestCatForDelete"}
+            new Cat { Id = Guid.NewGuid(), Name = "Nemo", LikesToPlay = false },
+            new Cat { Id = Guid.NewGuid(), Name = "Doris", LikesToPlay = false},
+            new Cat { Id = Guid.NewGuid(), Name = "Simba", LikesToPlay = false},
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345677"), Name = "TestCatForUnitTests", LikesToPlay = false},
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345613"), Name = "UpdatedCatName", LikesToPlay = false },
+            new Cat { Id = new Guid("12345678-1234-5678-1234-567812345675"), Name = "TestCatForDelete", LikesToPlay = false}
         };
 
         private static List<Dog> allDogs = new()
