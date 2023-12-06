@@ -8,13 +8,13 @@ namespace Test.CatTests.CommandTest
     public class UpdateCatTest
     {
         private UpdateCatByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void Setup()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateCatByIdCommandHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new UpdateCatByIdCommandHandler(_RealDatabase);
         }
 
         [Test]

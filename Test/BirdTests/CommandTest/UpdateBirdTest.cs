@@ -8,13 +8,13 @@ namespace Test.BirdTests.CommandTest
     public class UpdateBirdTest
     {
         private UpdateBirdByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _realDatabase;
 
         [SetUp]
         public void Setup()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateBirdByIdCommandHandler(_mockDatabase);
+            _realDatabase = new RealDatabase();
+            _handler = new UpdateBirdByIdCommandHandler(_realDatabase);
         }
 
         [Test]

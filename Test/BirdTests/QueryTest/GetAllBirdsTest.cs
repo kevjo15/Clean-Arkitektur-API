@@ -9,15 +9,14 @@ namespace Test.BirdTests.QueryTest
     public class GetAllBirdsTest
     {
         private GetAllBirdsQueryHandler _handler;
-        private MockDatabase _mockDatabase;
-        private MockDatabase? _temporaryDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetAllBirdsQueryHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new GetAllBirdsQueryHandler(_RealDatabase);
 
         }
         [Test]
@@ -33,7 +32,7 @@ namespace Test.BirdTests.QueryTest
             Assert.IsInstanceOf<List<Bird>>(result);
 
             var birds = (List<Bird>)result;
-            Assert.That(birds.Count, Is.EqualTo(_mockDatabase.Birds.Count));
+            Assert.That(birds.Count, Is.EqualTo(_RealDatabase.Birds.Count));
         }
     }
 }

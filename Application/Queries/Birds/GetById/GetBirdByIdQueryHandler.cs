@@ -7,9 +7,9 @@ namespace Application.Queries.Birds.GetById
 {
     public class GetBirdByIdQueryHandler : IRequestHandler<GetBirdByIdQuery, Bird>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public GetBirdByIdQueryHandler(MockDatabase mockDatabase)
+        public GetBirdByIdQueryHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

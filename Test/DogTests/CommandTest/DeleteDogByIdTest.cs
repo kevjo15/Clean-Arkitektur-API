@@ -10,13 +10,13 @@ namespace Test.DogTests.CommandTest
     public class DeleteDogByIdTest
     {
         private DeleteDogByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void Setup()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new DeleteDogByIdCommandHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new DeleteDogByIdCommandHandler(_RealDatabase);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Test.DogTests.CommandTest
             var result = await _handler.Handle(deleteCommand, new CancellationToken());
 
             // Assert
-            var dogExistsAfterDeletion = _mockDatabase.Dogs.Any(d => d.Id == existingDogId);
+            var dogExistsAfterDeletion = _RealDatabase.Dogs.Any(d => d.Id == existingDogId);
             Assert.IsFalse(dogExistsAfterDeletion, "Dog should be deleted from the database");
 
 

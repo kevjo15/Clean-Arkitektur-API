@@ -1,15 +1,20 @@
-﻿using Domain.Models;
+﻿using Application.Queries.Dogs.GetById;
+using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Queries.Cats.GetById
 {
     public class GetCatByIdQueryHandler : IRequestHandler<GetCatByIdQuery, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public GetCatByIdQueryHandler(MockDatabase mockDatabase)
+        public GetCatByIdQueryHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

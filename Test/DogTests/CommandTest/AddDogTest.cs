@@ -7,15 +7,15 @@ namespace Test.DogTests.CommandTest
     [TestFixture]
     public class AddDogTests
     {
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
         private AddDogCommandHandler _handler;
 
         [SetUp]
         public void SetUp()
         {
             // Initialisera mockdatabasen och hanteraren innan varje test
-            _mockDatabase = new MockDatabase();
-            _handler = new AddDogCommandHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new AddDogCommandHandler(_RealDatabase);
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace Test.DogTests.CommandTest
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            var newdoginDB = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Name == "New Dog");
+            var newdoginDB = _RealDatabase.Dogs.FirstOrDefault(dog => dog.Name == "New Dog");
 
             Assert.IsNotNull(newdoginDB);
             Assert.That(newdoginDB.Name, Is.EqualTo("New Dog"));

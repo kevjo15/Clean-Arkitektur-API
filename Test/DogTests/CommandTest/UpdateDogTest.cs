@@ -10,13 +10,13 @@ namespace Test.DogTests.CommandTest
     public class UpdateDogTests
     {
         private UpdateDogByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void Setup()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new UpdateDogByIdCommandHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new UpdateDogByIdCommandHandler(_RealDatabase);
         }
 
         [Test]

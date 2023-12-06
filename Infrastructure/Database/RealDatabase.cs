@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Database
 {
-    public class MockDatabase
+    public class RealDatabase
     {
         public List<Dog> Dogs
         {

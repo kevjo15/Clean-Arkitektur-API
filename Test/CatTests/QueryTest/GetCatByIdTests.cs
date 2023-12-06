@@ -1,5 +1,10 @@
 ﻿using Application.Queries.Cats.GetById;
 using Infrastructure.Database;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Test.CatTests.QueryTest
 {
@@ -7,14 +12,14 @@ namespace Test.CatTests.QueryTest
     public class GetCatByIdTests
     {
         private GetCatByIdQueryHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetCatByIdQueryHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new GetCatByIdQueryHandler(_RealDatabase);
         }
 
         // GetCatById

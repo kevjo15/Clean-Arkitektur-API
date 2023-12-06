@@ -1,14 +1,19 @@
 ﻿using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Commands.Cats.AddCat
 {
     public class AddCatCommandHandler : IRequestHandler<AddCatCommand, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public AddCatCommandHandler(MockDatabase mockDatabase)
+        public AddCatCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

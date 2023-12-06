@@ -18,13 +18,13 @@ namespace Test.BirdTests.CommandTest
     public class DeleteBirdByIdTest
     {
         private DeleteBirdByIdCommandHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _realDatabase;
 
         [SetUp]
         public void Setup()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new DeleteBirdByIdCommandHandler(_mockDatabase);
+            _realDatabase = new RealDatabase();
+            _handler = new DeleteBirdByIdCommandHandler(_realDatabase);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Test.BirdTests.CommandTest
             var result = await _handler.Handle(deleteCommand, new CancellationToken());
 
             // Assert
-            var birdExistsAfterDeletion = _mockDatabase.Birds.Any(b => b.Id == existingBirdId);
+            var birdExistsAfterDeletion = _realDatabase.Birds.Any(b => b.Id == existingBirdId);
 
             Assert.IsFalse(birdExistsAfterDeletion, "Bird should be deleted from the database");
 

@@ -7,7 +7,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddSingleton<MockDatabase>();
+            services.AddSingleton<RealDatabase>();
             return services;
         }
     }

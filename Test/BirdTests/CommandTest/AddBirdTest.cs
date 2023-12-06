@@ -7,14 +7,14 @@ namespace Test.BirdTests.CommandTest
     [TestFixture]
     public class AddBirdTest
     {
-        private MockDatabase _mockDatabase;
+        private RealDatabase _realDatabase;
         private AddBirdCommandHandler _handler;
 
         [SetUp]
         public void SetUp()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new AddBirdCommandHandler(_mockDatabase);
+            _realDatabase = new RealDatabase();
+            _handler = new AddBirdCommandHandler(_realDatabase);
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace Test.BirdTests.CommandTest
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            var newbirdinDB = _mockDatabase.Birds.FirstOrDefault(bird => bird.Name == "New Bird");
+            var newbirdinDB = _realDatabase.Birds.FirstOrDefault(bird => bird.Name == "New Bird");
 
             Assert.IsNotNull(newbirdinDB);
             Assert.That(newbirdinDB.Name, Is.EqualTo("New Bird"));

@@ -7,9 +7,9 @@ namespace Application.Commands.Cats.DeleteCat
 {
     public class DeleteCatByIdCommandHandler : IRequestHandler<DeleteCatByIdCommand, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public DeleteCatByIdCommandHandler(MockDatabase mockDatabase)
+        public DeleteCatByIdCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

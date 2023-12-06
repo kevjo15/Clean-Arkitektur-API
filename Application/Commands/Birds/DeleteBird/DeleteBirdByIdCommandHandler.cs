@@ -11,8 +11,8 @@ namespace Application.Commands.Birds.DeleteBird
 {
     public class DeleteBirdByIdCommandHandler : IRequestHandler<DeleteBirdByIdCommand, Bird>
     {
-        private readonly MockDatabase _mockDatabase;
-        public DeleteBirdByIdCommandHandler(MockDatabase mockDatabase)
+        private readonly RealDatabase _mockDatabase;
+        public DeleteBirdByIdCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

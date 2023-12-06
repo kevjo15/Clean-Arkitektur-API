@@ -7,9 +7,9 @@ namespace Application.Commands.Cats.UpdateCat
 
     public class UpdateCatByIdCommandHandler : IRequestHandler<UpdateCatByIdCommand, Cat>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public UpdateCatByIdCommandHandler(MockDatabase mockDatabase)
+        public UpdateCatByIdCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

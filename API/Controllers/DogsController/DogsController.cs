@@ -32,8 +32,16 @@ namespace API.Controllers.DogsController
         [Route("getAllDogs")]
         public async Task<IActionResult> GetAllDogs()
         {
-            return Ok(await _mediator.Send(new GetAllDogsQuery()));
-            //return Ok("GET ALL DOGS");
+            try
+            {
+                //return Ok("GET ALL DOGS");
+                return Ok(await _mediator.Send(new GetAllDogsQuery()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         // Get a dog by Id
@@ -69,7 +77,6 @@ namespace API.Controllers.DogsController
             if (!validatedDog.IsValid)
             {
                 return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
-
             }
 
             try

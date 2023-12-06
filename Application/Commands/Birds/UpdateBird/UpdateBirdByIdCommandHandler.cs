@@ -6,8 +6,8 @@ namespace Application.Commands.Birds.UpdateBird
 {
     public class UpdateBirdByIdCommandHandler : IRequestHandler<UpdateBirdByIdCommand, Bird>
     {
-        private readonly MockDatabase _mockDatabase;
-        public UpdateBirdByIdCommandHandler(MockDatabase mockDatabase)
+        private readonly RealDatabase _mockDatabase;
+        public UpdateBirdByIdCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

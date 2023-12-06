@@ -13,9 +13,9 @@ namespace Application.Validators.Dog
     {
         public GuidValidator()
         {
-            RuleFor(guid => guid)
-                .NotEmpty().WithMessage("Dog name can not be empty!")
-                .NotNull().WithMessage("Dog name can not be NULL");
+            RuleFor(guid => guid).NotNull().WithMessage("Guid cant be NULL")
+                .NotEmpty().WithMessage("Guid cant be empty")
+                .NotEqual(Guid.Empty).WithMessage("Guid should not be empty");
         }
     }
 }

@@ -7,14 +7,14 @@ namespace Test.CatTests.CommandTest
     [TestFixture]
     public class AddCatTest
     {
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
         private AddCatCommandHandler _handler;
 
         [SetUp]
         public void SetUp()
         {
-            _mockDatabase = new MockDatabase();
-            _handler = new AddCatCommandHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new AddCatCommandHandler(_RealDatabase);
         }
         [Test]
         public async Task AddCat_ShouldReturnCorrectCat()
@@ -26,7 +26,7 @@ namespace Test.CatTests.CommandTest
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            var newcatinDB = _mockDatabase.Cats.FirstOrDefault(cat => cat.Name == "New Cat");
+            var newcatinDB = _RealDatabase.Cats.FirstOrDefault(cat => cat.Name == "New Cat");
 
             Assert.IsNotNull(newcatinDB);
             Assert.That(newcatinDB.Name, Is.EqualTo("New Cat"));

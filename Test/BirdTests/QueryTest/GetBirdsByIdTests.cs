@@ -7,14 +7,14 @@ namespace Test.BirdTests.QueryTest
     public class GetBirdsByIdTests
     {
         private GetBirdByIdQueryHandler _handler;
-        private MockDatabase _mockDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
-            _handler = new GetBirdByIdQueryHandler(_mockDatabase);
+            _RealDatabase = new RealDatabase();
+            _handler = new GetBirdByIdQueryHandler(_RealDatabase);
         }
 
         // GetBirdById

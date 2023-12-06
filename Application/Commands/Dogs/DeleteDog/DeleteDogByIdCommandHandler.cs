@@ -6,21 +6,21 @@ namespace Application.Commands.Dogs.DeleteDog
 {
     public class DeleteDogByIdCommandHandler : IRequestHandler<DeleteDogByIdCommand, Dog>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _realDatabase;
 
-        public DeleteDogByIdCommandHandler(MockDatabase mockdatabase)
+        public DeleteDogByIdCommandHandler(RealDatabase realdatabase)
         {
-            _mockDatabase = mockdatabase;
+            _realDatabase = realdatabase;
         }
 
         public Task<Dog> Handle(DeleteDogByIdCommand request, CancellationToken cancellationToken)
         {
             // Hitta hunden att ta bort från databasen
-            var dogToDelete = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id);
+            var dogToDelete = _realDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id);
 
             if (dogToDelete != null)
             {
-                _mockDatabase.Dogs.Remove(dogToDelete);
+                _realDatabase.Dogs.Remove(dogToDelete);
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Application.Queries.Dogs.GetAll;
+using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
 
@@ -6,9 +7,9 @@ namespace Application.Commands.Dogs
 {
     public class AddDogCommandHandler : IRequestHandler<AddDogCommand, Dog>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly RealDatabase _mockDatabase;
 
-        public AddDogCommandHandler(MockDatabase mockDatabase)
+        public AddDogCommandHandler(RealDatabase mockDatabase)
         {
             _mockDatabase = mockDatabase;
         }

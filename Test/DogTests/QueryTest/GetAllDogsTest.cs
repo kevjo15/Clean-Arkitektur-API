@@ -2,7 +2,13 @@
 using Application.Queries.Dogs.GetAll;
 using Domain.Models;
 using Infrastructure.Database;
-
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Test.DogTests.QueryTest
 {
@@ -10,16 +16,15 @@ namespace Test.DogTests.QueryTest
     public class GetAllDogsTest
     {
         private GetAllDogsQueryHandler _handler;
-        private MockDatabase _mockDatabase;
-        private MockDatabase? _temporaryDatabase;
+        private RealDatabase _RealDatabase;
 
         [SetUp]
         public void SetUp()
         {
             // Initialize the handler and mock database before each test
-            _mockDatabase = new MockDatabase();
+            _RealDatabase = new RealDatabase();
 
-            _handler = new GetAllDogsQueryHandler(_mockDatabase);
+            _handler = new GetAllDogsQueryHandler(_RealDatabase);
         }
         [Test]
         public async Task GetAllDogs_ShouldReturnListOfDog()
@@ -34,7 +39,7 @@ namespace Test.DogTests.QueryTest
             Assert.IsInstanceOf<List<Dog>>(result);
 
             var dogs = (List<Dog>)result;
-            Assert.That(dogs.Count, Is.EqualTo(_mockDatabase.Dogs.Count));
+            Assert.That(dogs.Count, Is.EqualTo(_RealDatabase.Dogs.Count));
         }
         //[Test]
         //public async Task Handle_ReturnsEmptyListWhenNoDogs()
