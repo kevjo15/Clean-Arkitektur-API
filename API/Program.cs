@@ -1,6 +1,9 @@
 using Application;
+using FluentAssertions.Common;
 using Infrastructure;
 using Infrastructure.Database;
+using Infrastructure.Database.Repository;
+using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

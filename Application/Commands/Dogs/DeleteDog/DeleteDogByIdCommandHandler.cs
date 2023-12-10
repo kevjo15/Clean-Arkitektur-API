@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Infrastructure.Database;
+using Infrastructure.Interfaces;
 using MediatR;
 
 namespace Application.Commands.Dogs.DeleteDog
@@ -7,10 +8,12 @@ namespace Application.Commands.Dogs.DeleteDog
     public class DeleteDogByIdCommandHandler : IRequestHandler<DeleteDogByIdCommand, Dog>
     {
         private readonly RealDatabase _realDatabase;
+        //private readonly IDogRepository _dogRepository;
 
-        public DeleteDogByIdCommandHandler(RealDatabase realdatabase)
+        public DeleteDogByIdCommandHandler(RealDatabase realdatabase/*, IDogRepository dogRepository*/)
         {
             _realDatabase = realdatabase;
+            //_dogRepository = dogRepository;
         }
 
         public Task<Dog> Handle(DeleteDogByIdCommand request, CancellationToken cancellationToken)
@@ -28,8 +31,18 @@ namespace Application.Commands.Dogs.DeleteDog
                 throw new InvalidOperationException("No dog with the given ID was found.");
             }
 
-
             return Task.FromResult(dogToDelete);
+
+            //Dog dogToDelete = await _dogRepository.GetByIdAsync(request.Id);
+
+            //if (dogToDelete == null)
+            //{
+            //     throw new InvalidOperationException("No dog with the given ID was found.");
+            //}
+
+            //await _dogRepository.DeleteAsync(request.Id);
+
+            //return (dogToDelete);
 
         }
 
