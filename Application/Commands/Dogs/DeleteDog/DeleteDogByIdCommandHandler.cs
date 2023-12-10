@@ -25,7 +25,7 @@ namespace Application.Commands.Dogs.DeleteDog
             else
             {
                 // Throw an exception or handle the null case as needed for your application
-                throw new InvalidOperationException("No bird with the given ID was found.");
+                throw new InvalidOperationException("No dog with the given ID was found.");
             }
 
 

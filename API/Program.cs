@@ -1,20 +1,28 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Lägg till tjänster i containern.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("ConnectionString is null.");
+
+// Lägg till konfiguration för DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySQL(connectionString));
+
+// Lägg till tjänster från Application och Infrastructure-projekten
 builder.Services.AddApplication().AddInfrastructure();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Konfigurera HTTP-request-pipelinen.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

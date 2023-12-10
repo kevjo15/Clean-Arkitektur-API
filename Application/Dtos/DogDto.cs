@@ -1,5 +1,7 @@
 ﻿
 
+
+
 namespace Application.Dtos
 {
     public class DogDto

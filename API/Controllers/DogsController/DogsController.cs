@@ -5,8 +5,10 @@ using Application.Dtos;
 using Application.Queries.Dogs.GetAll;
 using Application.Queries.Dogs.GetById;
 using Application.Validators.Dog;
+using Infrastructure.Database;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,12 +21,13 @@ namespace API.Controllers.DogsController
         internal readonly IMediator _mediator;
         private readonly DogValidator _dogValidator;
         private readonly GuidValidator _guidValidator;
-
-        public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator)
+        private readonly AppDbContext _appDbContext;
+        public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator, AppDbContext appDbContext)
         {
             _mediator = mediator;
             _dogValidator = dogValidator;
             _guidValidator = guidValidator;
+            _appDbContext = appDbContext;
         }
 
         // Get all dogs from database
@@ -32,10 +35,14 @@ namespace API.Controllers.DogsController
         [Route("getAllDogs")]
         public async Task<IActionResult> GetAllDogs()
         {
+            AppDbContext appDbContext = _appDbContext;
             try
             {
-                //return Ok("GET ALL DOGS");
-                return Ok(await _mediator.Send(new GetAllDogsQuery()));
+                var query = new GetAllDogsQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+                //return Ok(await _mediator.Send(new GetAllDogsQuery()));
+
             }
             catch (Exception ex)
             {
