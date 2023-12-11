@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -11,6 +13,7 @@ namespace Application
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
 
             services.AddValidatorsFromAssembly(assembly);
+
 
             return services;
         }

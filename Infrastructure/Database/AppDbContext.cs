@@ -1,7 +1,7 @@
 ﻿using Domain.Models;
 using Domain.Models.Animal;
+using Domain.Models.User;
 using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,10 +13,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
@@ -24,6 +23,7 @@ namespace Infrastructure.Database
         public DbSet<Bird> Birds { get; set; }
         public DbSet<Cat> Cats { get; set; }
         public DbSet<Dog> Dogs { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
