@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using Domain.Models.Animal;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Database
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         private readonly IConfiguration _configuration;
 
