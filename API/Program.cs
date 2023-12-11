@@ -36,8 +36,6 @@ builder.Services.AddAuthentication(x =>
     };
 });
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntitityFrameworkStores<AppContext>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
