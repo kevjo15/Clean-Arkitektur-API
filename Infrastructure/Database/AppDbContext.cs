@@ -20,14 +20,15 @@ namespace Infrastructure.Database
         {
             _configuration = configuration;
         }
-        public DbSet<Bird> Birds { get; set; }
-        public DbSet<Cat> Cats { get; set; }
-        public DbSet<Dog> Dogs { get; set; }
+        public virtual DbSet<Bird> Birds { get; set; }
+        public virtual DbSet<Cat> Cats { get; set; }
+        public virtual DbSet<Dog> Dogs { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseMySQL("Server=127.0.0.1;Database=clean-api2;User=root;Password=Bajsan123;");
-            optionsBuilder.UseMySQL(_configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseMySQL(_configuration.GetConnectionString("DefaultConnection")!);
             //optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=clean-api;User=root;Password=Bajsan123;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
