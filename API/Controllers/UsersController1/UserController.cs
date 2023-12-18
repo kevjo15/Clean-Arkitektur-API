@@ -1,12 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Commands.Users.RegisterUser;
+using Application.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers.UsersController1
 {
     public class UserController : Controller
     {
-        public IActionResult Index()
+        internal readonly IMediator _mediator;
+
+        public UserController(IMediator mediator)
         {
-            return View();
+            _mediator = mediator;
+        }
+
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Register([FromBody] UserDto userToRegister)
+        {
+            return Ok(await _mediator.Send(new RegisterUserCommand(userToRegister)));
         }
     }
 }
