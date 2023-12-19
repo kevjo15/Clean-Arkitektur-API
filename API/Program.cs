@@ -26,6 +26,7 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(SwaggerConfig =>
 {
@@ -62,11 +63,11 @@ builder.Services.AddSwaggerGen(SwaggerConfig =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("ConnectionString is null.");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("ConnectionString is null.");
 
-// Lägg till konfiguration för DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySQL(connectionString));
+//// Lägg till konfiguration för DbContext
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseMySQL(connectionString));
 
 // Lägg till tjänster från Application och Infrastructure-projekten
 builder.Services.AddApplication().AddInfrastructure();

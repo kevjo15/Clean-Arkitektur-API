@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231218172120_NewMigration")]
+    partial class NewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,19 +42,19 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c38239de-4ff1-467d-9f87-9e2fe1818465"),
+                            Id = new Guid("a30a64d7-553f-4a8e-9617-8a70d5464cdb"),
                             CanFly = false,
                             Name = "Drake"
                         },
                         new
                         {
-                            Id = new Guid("21e2cb9a-c71e-49f7-af64-3e9f38f3ccaf"),
+                            Id = new Guid("1ab23ee7-de9e-4fe0-aaa9-0b3f8a580d19"),
                             CanFly = false,
                             Name = "Simon"
                         },
                         new
                         {
-                            Id = new Guid("6b7e2976-1004-4cdc-8c09-b21131846a0a"),
+                            Id = new Guid("b05cf71b-68a3-4515-b9d3-5b5b82026c6c"),
                             CanFly = false,
                             Name = "Gustav"
                         });
@@ -77,19 +80,19 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("446a0d4c-0a54-4e16-b812-c712ae312de9"),
+                            Id = new Guid("24703e2b-2c40-493a-aa8c-dff44f4bc2e1"),
                             LikesToPlay = false,
                             Name = "Nemo"
                         },
                         new
                         {
-                            Id = new Guid("91094fb7-1176-4a2f-9b2b-2b0d9a1fdc46"),
+                            Id = new Guid("a872f013-48d7-4242-b6d1-45f01b2f5a15"),
                             LikesToPlay = false,
                             Name = "Doris"
                         },
                         new
                         {
-                            Id = new Guid("b810711b-69d9-4388-baf8-25099da34d6d"),
+                            Id = new Guid("4c1ee71a-22d4-483e-a471-092f1b334560"),
                             LikesToPlay = false,
                             Name = "Simba"
                         });
@@ -112,17 +115,17 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("884fc3b6-7fd1-4851-ad44-62b1196ab8ac"),
+                            Id = new Guid("79d17d29-03d6-4b4a-8ece-c557e257f36b"),
                             Name = "Björn"
                         },
                         new
                         {
-                            Id = new Guid("6f18bd58-efe4-4882-8161-c22b71e404c2"),
+                            Id = new Guid("f0e1b9a9-8f1d-40e6-bcdb-529ea5b7acae"),
                             Name = "Patrik"
                         },
                         new
                         {
-                            Id = new Guid("10f13ad9-0f72-4206-b626-783d0b95c1ea"),
+                            Id = new Guid("3184fa5e-ff22-449a-893b-f1a500a136a6"),
                             Name = "Alfred"
                         });
                 });

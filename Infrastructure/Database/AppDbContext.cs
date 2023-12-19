@@ -16,6 +16,9 @@ namespace Infrastructure.Database
     {
         private readonly IConfiguration _configuration;
 
+        public AppDbContext()
+        {
+        }
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
@@ -28,7 +31,7 @@ namespace Infrastructure.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseMySQL("Server=127.0.0.1;Database=clean-api2;User=root;Password=Bajsan123;");
-            optionsBuilder.UseMySQL(_configuration.GetConnectionString("DefaultConnection")!);
+            optionsBuilder.UseMySql("Server=127.0.0.1;Database=clean-api2;User=root;Password=Bajsan123;", new MySqlServerVersion(new Version(8, 2, 0)));
             //optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=clean-api;User=root;Password=Bajsan123;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
