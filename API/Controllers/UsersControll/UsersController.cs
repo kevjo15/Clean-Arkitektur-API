@@ -5,6 +5,10 @@ using Application;
 using FluentValidation;
 using Application.Validators.Dog;
 using Microsoft.AspNetCore.Identity;
+using Application.Commands.Users.DeleteUser;
+using Application.Commands.Users.UpdateUser;
+using Application.Queries.Users.GetById;
+using Application.Queries.Users.GetAll;
 
 
 namespace API.Controllers.Usercontroller

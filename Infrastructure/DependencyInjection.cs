@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Users;
 using Infrastructure.Database.Repository;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace Infrastructure
         {
             services.AddSingleton<RealDatabase>();
             services.AddScoped<IDogRepository, DogRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql("Server=127.0.0.1;Database=clean-api2;User=root;Password=Bajsan123;",
