@@ -1,6 +1,8 @@
 ﻿using Application.Dtos;
+using Application.Queries.Users.GetByUsername;
 using Application.Validators.Dog;
 using Domain.Models;
+using Infrastructure.Database.Repositories.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,16 +20,15 @@ namespace API.Controllers.AuthController
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly IUserRepository _userRepository;
+        private readonly IMediator _mediator;
 
 
-
-        internal readonly IMediator _mediator;
-
-
-        public AuthController(IMediator mediator, IConfiguration configuration)
+        public AuthController(IMediator mediator, IConfiguration configuration, IUserRepository userRepository)
         {
             _mediator = mediator;
             _configuration = configuration;
+            _userRepository = userRepository;
 
         }
 
@@ -52,6 +53,7 @@ namespace API.Controllers.AuthController
             user.UserName = request.Username;
             user.UserPassword = passwordHash;
 
+            _userRepository.AddAsync(user);
             // Returns the registered user. (Note: In real apps, don't return sensitive data.)
             return Ok(user);
         }
@@ -59,25 +61,17 @@ namespace API.Controllers.AuthController
         // Endpoint for logging in a user.
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult<string> Login(UserDto request)
+        public async Task<IActionResult> Login(UserDto request)
         {
-            // Checks if the username exists. Returns an error if not found.
-            if (user.UserName != request.Username)
+            var user = await _mediator.Send(new FindUserByUsernameQuery(request.Username));
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.UserPassword))
             {
-                return BadRequest("User not found");
+                return Unauthorized("Användarnamnet eller lösenordet är felaktigt.");
             }
 
-            // Verifies the password. If incorrect, returns an error.
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.UserPassword))
-            {
-                return BadRequest("Wrong password");
-            }
-
-            // Creates a JWT token for the authenticated user.
-            string token = CreateToken(user);
-
-            // Returns the generated token.
-            return Ok(token);
+            var token = CreateToken(user);
+            return Ok(new { Token = token });
         }
 
         //Helper method to create a JWT token.

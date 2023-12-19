@@ -13,11 +13,12 @@ namespace Application.Commands.Users.UpdateUser
     {
         public UserDto UpdateUserDto { get; }
         public Guid UserId { get; }
-
-        public UpdateUserByIdCommand(UserDto updateUserDto, Guid userId)
+        public string NewPassword { get; set; }
+        public UpdateUserByIdCommand(UserDto updateUserDto, Guid userId, string newPassword)
         {
             UpdateUserDto = updateUserDto;
             UserId = userId;
+            NewPassword = newPassword;
         }
     }
 }

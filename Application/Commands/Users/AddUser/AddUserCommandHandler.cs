@@ -23,7 +23,9 @@ namespace Application.Commands.Users.AddUser
             User userToCreate = new()
             {
                 Id = Guid.NewGuid(),
-                UserName = request.NewUser.Username
+                UserName = request.NewUser.Username,
+                UserPassword = BCrypt.Net.BCrypt.HashPassword(request.NewUser.Password), 
+                
             };
 
             await _userRepository.AddAsync(userToCreate);

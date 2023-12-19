@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.Commands.Users.UpdateUser
 {
@@ -18,28 +19,28 @@ namespace Application.Commands.Users.UpdateUser
             _userRepository = userRepository;
         }
 
-        public async Task<User> Handle(UpdateUserByIdCommand request, CancellationToken cancellationToken)
+        public async Task<User> Handle(UpdateUserByIdCommand command, CancellationToken cancellationToken)
         {
-            User userToUpdate = await _userRepository.GetByIdAsync(request.UserId);
-
-            if (userToUpdate == null)
+            var user = await _userRepository.GetByIdAsync(command.UserId);
+            if (user == null)
             {
-                throw new KeyNotFoundException("User not found.");
+                throw new InvalidOperationException($"Användare med ID {command.UserId} hittades inte.");
             }
 
-            // Perform the mapping here
-            if (!string.IsNullOrWhiteSpace(request.UpdateUserDto.Username))
+            // Uppdatera lösenordet om det är nytt
+            if (!string.IsNullOrWhiteSpace(command.NewPassword))
             {
-                userToUpdate.UserName = request.UpdateUserDto.Username;
+                user.UserPassword = BCrypt.Net.BCrypt.HashPassword(command.NewPassword);
             }
-            if (!string.IsNullOrWhiteSpace(request.UpdateUserDto.Password))
+
+            // Uppdatera userName om det är nytt
+            if (!string.IsNullOrWhiteSpace(command.UpdateUserDto.Username))
             {
-                userToUpdate.UserPassword = BCrypt.Net.BCrypt.HashPassword(request.UpdateUserDto.Password);
+                user.UserName = command.UpdateUserDto.Username;
             }
-            userToUpdate.UserPassword = request.UpdateUserDto.Username;
-            userToUpdate.UserPassword = request.UpdateUserDto.Password;
-            await _userRepository.UpdateAsync(userToUpdate);
-            return userToUpdate;
+
+            await _userRepository.UpdateAsync(user);
+            return user;
         }
 
     }

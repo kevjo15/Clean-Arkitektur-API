@@ -1,5 +1,7 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Crypto.Generators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,15 @@ namespace Infrastructure.Database.Repositories.Users
             }
         }
 
+        public async Task<User> FindByUsernameAsync(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentException("Username can not be null or empty.", nameof(username));
+            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName.ToLower() == username.ToLower());
+        }
+
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
@@ -48,5 +59,6 @@ namespace Infrastructure.Database.Repositories.Users
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+
     }
 }
