@@ -93,7 +93,7 @@ namespace API.Controllers.Usercontroller
 
         // ------------------------------------------------------------------------------------------------------
         // Delete user by Id
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteUserById(Guid id)
         {
             var user = await _mediator.Send(new DeleteUserByIdCommand(id));

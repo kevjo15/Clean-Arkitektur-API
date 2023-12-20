@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Infrastructure.Database.Repositories.UserAnimalRepository;
 using Infrastructure.Database.Repositories.Users;
 using Infrastructure.Database.Repository;
 using Infrastructure.Interfaces;
@@ -14,6 +15,8 @@ namespace Application
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAnimalRepository, UserAnimalRepository>();
+
 
             services.AddValidatorsFromAssembly(assembly);
 

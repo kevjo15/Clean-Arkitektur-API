@@ -27,6 +27,7 @@ namespace Infrastructure.Database
         public virtual DbSet<Cat> Cats { get; set; }
         public virtual DbSet<Dog> Dogs { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserAnimal> UserAnimals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -56,6 +57,22 @@ namespace Infrastructure.Database
             );
 
             base.OnModelCreating(modelBuilder);
+
+            // Konfigurera sammansatt primärnyckel för UserAnimalModel
+            modelBuilder.Entity<UserAnimal>()
+                .HasKey(uam => new { uam.UserId, uam.AnimalModelId });
+
+            // Konfigurera relationen User till UserAnimalModel
+            modelBuilder.Entity<UserAnimal>()
+                .HasOne(uam => uam.User)
+                .WithMany(u => u.UserAnimals)
+                .HasForeignKey(uam => uam.UserId);
+
+            // Konfigurera relationen AnimalModel till UserAnimalModel
+            modelBuilder.Entity<UserAnimal>()
+                .HasOne(uam => uam.AnimalModel)
+                .WithMany(am => am.UserAnimals)
+                .HasForeignKey(uam => uam.AnimalModelId);
         }
     }
 }
