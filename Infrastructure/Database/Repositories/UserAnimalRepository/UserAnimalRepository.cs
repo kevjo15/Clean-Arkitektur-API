@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Models.Animal;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,21 @@ namespace Infrastructure.Database.Repositories.UserAnimalRepository
             _appDbContext = appDbContext;
         }
 
-        public async Task<UserAnimal> AddUserAnimalAsync(Guid userId, Guid animalModelId)
+        public async Task<UserAnimal> AddUserAnimalAsync(Guid userId, Guid animalId)
         {
-            var userAnimal = new UserAnimal { UserId = userId, AnimalModelId = animalModelId };
+            var user = await _appDbContext.Users.FindAsync(userId);
+            var animal = await _appDbContext.Set<AnimalModel>().FindAsync(animalId);
+
+            if (user == null || animal == null)
+            {
+                throw new ArgumentException("User or Animal not found");
+            }
+
+            var userAnimal = new UserAnimal { UserId = userId, AnimalModelId = animalId };
             _appDbContext.UserAnimals.Add(userAnimal);
             await _appDbContext.SaveChangesAsync();
 
-            return userAnimal; // Returnerar det nyss skapade UserAnimal-objektet
+            return userAnimal;
         }
         public async Task RemoveUserAnimalAsync(Guid userId, Guid animalId)
         {

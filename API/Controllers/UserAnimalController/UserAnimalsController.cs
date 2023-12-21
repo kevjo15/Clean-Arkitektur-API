@@ -1,13 +1,9 @@
 ﻿using Application.Commands.UserAnimal.AddUserAnimal;
 using Application.Commands.UserAnimal.RemoveUserAnimal;
 using Application.Commands.UserAnimal.UpdateUserAnimal;
-using Application.Dtos;
 using Application.Queries.UserAnimal;
-using Domain.Models;
-using Infrastructure.Database.Repositories.UserAnimalRepository;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers.UserAnimalController
 {
@@ -34,7 +30,7 @@ namespace API.Controllers.UserAnimalController
 
         // POST: api/UserAnimals
         [HttpPost]
-        [Route("AddUserAnimal/{updatedUserId}")]
+        [Route("AddUserAnimal/{UserId}/{AnimalId}")]
         public async Task<IActionResult> AddUserAnimal(AddUserAnimalCommand command)
         {
             var result = await _mediator.Send(command);
@@ -46,7 +42,7 @@ namespace API.Controllers.UserAnimalController
         }
 
         // DELETE: api/UserAnimals/{userId}/{animalModelId}
-        [HttpDelete("{userId}/{animalModelId}")]
+        [HttpDelete("DeleteRelationShip/{userId}/{animalModelId}")]
         public async Task<IActionResult> RemoveUserAnimal(Guid userId, Guid animalModelId)
         {
             var command = new RemoveUserAnimalCommand(userId, animalModelId);
