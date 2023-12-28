@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Infrastructure.Database.Repositories.Cats;
 using Infrastructure.Database.Repositories.UserAnimalRepository;
 using Infrastructure.Database.Repositories.Users;
 using Infrastructure.Database.Repository;
@@ -16,6 +17,7 @@ namespace Application
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserAnimalRepository, UserAnimalRepository>();
+            services.AddScoped<ICatRepository, CatRepository>();
 
 
             services.AddValidatorsFromAssembly(assembly);

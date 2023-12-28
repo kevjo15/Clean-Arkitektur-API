@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Cats;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace Application.Commands.Cats.AddCat
 {
     public class AddCatCommandHandler : IRequestHandler<AddCatCommand, Cat>
     {
-        private readonly RealDatabase _mockDatabase;
+        private readonly ICatRepository _catRepository;
 
-        public AddCatCommandHandler(RealDatabase mockDatabase)
+        public AddCatCommandHandler(ICatRepository catRepository)
         {
-            _mockDatabase = mockDatabase;
+            _catRepository = catRepository;
         }
         public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
         {
@@ -24,7 +25,7 @@ namespace Application.Commands.Cats.AddCat
                 Id = Guid.NewGuid(),
                 Name = request.NewCat.Name
             };
-            _mockDatabase.Cats.Add(CatToCreate);
+            _catRepository.AddAsync(CatToCreate);
 
             return Task.FromResult(CatToCreate);
         }

@@ -2,34 +2,30 @@
 using MediatR;
 using System;
 using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Cats;
 
 namespace Application.Commands.Cats.DeleteCat
 {
     public class DeleteCatByIdCommandHandler : IRequestHandler<DeleteCatByIdCommand, Cat>
     {
-        private readonly RealDatabase _mockDatabase;
+        private readonly ICatRepository _catRepository;
 
-        public DeleteCatByIdCommandHandler(RealDatabase mockDatabase)
+        public DeleteCatByIdCommandHandler(ICatRepository catRepository)
         {
-            _mockDatabase = mockDatabase;
+            _catRepository = catRepository;
         }
 
-        public Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Cat> Handle(DeleteCatByIdCommand request, CancellationToken cancellationToken)
         {
-            var catToDelete = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == request.Id);
-
-            if (catToDelete != null)
+            var catToDelete = await _catRepository.GetByIdAsync(request.Id);
+            if (catToDelete == null)
             {
-                _mockDatabase.Cats.Remove(catToDelete);
-            }
-            else
-            {
-                // Throw an exception or handle the null case as needed for your application
                 throw new InvalidOperationException("No cat with the given ID was found.");
             }
 
+            await _catRepository.DeleteAsync(request.Id);
 
-            return Task.FromResult(catToDelete);
+            return catToDelete;
         }
     }
 }
