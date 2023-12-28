@@ -1,31 +1,31 @@
 ﻿using Domain.Models;
 using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Birds;
 using MediatR;
 
 namespace Application.Commands.Birds.UpdateBird
 {
     public class UpdateBirdByIdCommandHandler : IRequestHandler<UpdateBirdByIdCommand, Bird>
     {
-        private readonly RealDatabase _mockDatabase;
-        public UpdateBirdByIdCommandHandler(RealDatabase mockDatabase)
+        private readonly IBirdRepository _birdRepository;
+        public UpdateBirdByIdCommandHandler(IBirdRepository birdRepository)
         {
-            _mockDatabase = mockDatabase;
+            _birdRepository = birdRepository;
         }
-        public Task<Bird> Handle(UpdateBirdByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Bird> Handle(UpdateBirdByIdCommand request, CancellationToken cancellationToken)
         {
-            Bird birdToUpdate = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == request.Id)!;
-
-            if (birdToUpdate != null)
+            Bird birdToUpdate = await _birdRepository.GetByIdAsync(request.Id);
+            if (birdToUpdate == null)
             {
-                birdToUpdate.Name = request.UpdatedBird.Name;
-                birdToUpdate.CanFly = request.UpdatedBird.CanFly;
-
-                //if (request.CanFly.HasValue)
-                //{
-                //    birdToUpdate.CanFly = request.CanFly.Value;
-                //}
+                return null!;
             }
-            return Task.FromResult(birdToUpdate)!;
+
+            birdToUpdate.Name = request.UpdatedBird.Name;
+            birdToUpdate.CanFly = request.UpdatedBird.CanFly;
+            await _birdRepository.UpdateAsync(birdToUpdate);
+
+            return birdToUpdate;
+
         }
     }
 }

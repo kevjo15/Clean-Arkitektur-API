@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Birds;
 using Infrastructure.Database.Repositories.Cats;
 using Infrastructure.Database.Repositories.Users;
 using Infrastructure.Database.Repository;
@@ -16,6 +17,7 @@ namespace Infrastructure
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICatRepository, CatRepository>();
+            services.AddScoped<IBirdRepository, BirdRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseMySql("Server=127.0.0.1;Database=clean-api2;User=root;Password=Bajsan123;",
