@@ -30,7 +30,7 @@ namespace API.Controllers.UserAnimalController
 
         // POST: api/UserAnimals
         [HttpPost]
-        [Route("AddUserAnimal/{UserId}/{AnimalId}")]
+        [Route("AddUserAnimal")]
         public async Task<IActionResult> AddUserAnimal(AddUserAnimalCommand command)
         {
             var result = await _mediator.Send(command);

@@ -26,6 +26,7 @@ namespace Application.Queries.UserAnimal
             var userAnimalDtos = users.Select(user => new UserAnimalDto
             {
                 UserId = user.Id,
+                UserName = user.UserName,
                 Dogs = user.UserAnimals
                     .Where(ua => ua.AnimalModel is Dog)
                     .Select(ua => new DogDto { Name = ua.AnimalModel.Name })

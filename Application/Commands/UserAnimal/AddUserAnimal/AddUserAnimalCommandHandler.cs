@@ -27,6 +27,7 @@ namespace Application.Commands.UserAnimal.AddUserAnimal
             return new UserAnimalDto
             {
                 UserId = request.UserId,
+                //AnimalModelId = request.AnimalModelId,
                 // Fyll i övriga fält beroende på dina behov
             };
 
