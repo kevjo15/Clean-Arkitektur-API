@@ -70,7 +70,7 @@ namespace API.Controllers.CatsController
 
         }
         [HttpGet("search")]
-        public async Task<IActionResult> GetCatsByBreedAndWeight([FromQuery] string breed, [FromQuery] int? weight)
+        public async Task<IActionResult> GetCatsByBreedAndWeight([FromQuery] string? breed, [FromQuery] int? weight)
         {
             var query = new GetCatsByBreedAndWeightQuery(breed, weight);
             var cats = await _mediator.Send(query);

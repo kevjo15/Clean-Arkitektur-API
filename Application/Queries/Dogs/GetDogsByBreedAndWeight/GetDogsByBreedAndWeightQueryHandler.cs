@@ -20,7 +20,16 @@ namespace Application.Queries.Dogs.GetDogsByBreedAndWeight
 
         public async Task<IEnumerable<Dog>> Handle(GetDogsByBreedAndWeightQuery request, CancellationToken cancellationToken)
         {
-            return await _dogRepository.GetByBreedAndWeightAsync(request.Breed, request.Weight);
+            //if (request.Weight.HasValue && string.IsNullOrEmpty(request.Breed))
+            //{
+            //    // Hämta hundar baserat enbart på vikt
+            //    return await _dogRepository.GetDogsByWeightAsync(request.Weight.Value);
+            //}
+            //else
+            //{
+                // Hämta hundar baserat på både ras och vikt, eller enbart ras
+                return await _dogRepository.GetByBreedAndWeightAsync(request.Breed, request.Weight);
+            //}
         }
     }
 }

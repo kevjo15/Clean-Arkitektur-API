@@ -16,6 +16,7 @@ namespace Infrastructure.Interfaces
         Task DeleteAsync(Guid dogId);
         Task<List<Dog>> GetAllDogsAsync();
         Task<IEnumerable<Dog>> GetByBreedAndWeightAsync(string breed, int? weight);
+        //Task<IEnumerable<Dog>> GetDogsByWeightAsync(int weight);
 
     }
 }

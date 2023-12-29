@@ -142,14 +142,52 @@ namespace API.Controllers.DogsController
             return NotFound("Dog Finns inte med i listan"); // Om hunden inte hittades, returnera NotFound
 
         }
-        [HttpGet("search")]
-        public async Task<IActionResult> GetDogs([FromQuery] string breed, [FromQuery] int? weight)
-        {
-            var query = new GetDogsByBreedAndWeightQuery(breed, weight);
-            var dogs = await _mediator.Send(query);
-            return Ok(dogs);
-        }
+        //[HttpGet("search")]
+        //public async Task<IActionResult> GetDogs([FromQuery] string breed, [FromQuery] int? weight)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(breed) && weight.HasValue)
+        //        {
+        //            // Om endast vikt är angiven
+        //            var weightQuery = new GetDogsByWeightQuery(weight.Value);
+        //            var dogsByWeight = await _mediator.Send(weightQuery);
+        //            return Ok(dogsByWeight);
+        //        }
+        //        else
+        //        {
+        //            // Om ras och/eller vikt är angiven
+        //            var query = new GetDogsByBreedAndWeightQuery(breed, weight);
+        //            var dogs = await _mediator.Send(query);
+        //            return Ok(dogs);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Hantera undantag på lämpligt sätt
+        //        return StatusCode(500, "Ett internt serverfel inträffade");
+        //    }
+        //    //var query = new GetDogsByBreedAndWeightQuery(breed, weight);
+        //    //var dogs = await _mediator.Send(query);
+        //    //return Ok(dogs);
+        //}
 
+        [HttpGet("search")]
+        public async Task<IActionResult> GetDogs([FromQuery] string? breed, [FromQuery] int? weight)
+        {
+            try
+            {
+                // Skicka parametrar till en enda query
+                var query = new GetDogsByBreedAndWeightQuery(breed, weight);
+                var dogs = await _mediator.Send(query);
+                return Ok(dogs);
+            }
+            catch (Exception ex)
+            {
+                // Logga och hantera undantaget på lämpligt sätt
+                return StatusCode(500, "Ett internt serverfel inträffade: " + ex.Message);
+            }
+        }
 
     }
 }

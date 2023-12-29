@@ -74,10 +74,11 @@ namespace Infrastructure.Database.Repository
 
                 if (weight.HasValue)
                 {
-                    query = query.Where(c => c.Weight >= weight.Value);
+                    query = query.Where(c => c.Weight == weight.Value);
                 }
 
                 return await query.ToListAsync();
         }
+
     }
 }
