@@ -4,7 +4,9 @@ using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAll;
 using Application.Queries.Dogs.GetById;
+using Application.Queries.Dogs.GetDogsByBreedAndWeight;
 using Application.Validators.Dog;
+using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -140,5 +142,14 @@ namespace API.Controllers.DogsController
             return NotFound("Dog Finns inte med i listan"); // Om hunden inte hittades, returnera NotFound
 
         }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetDogs([FromQuery] string breed, [FromQuery] int? weight)
+        {
+            var query = new GetDogsByBreedAndWeightQuery(breed, weight);
+            var dogs = await _mediator.Send(query);
+            return Ok(dogs);
+        }
+
+
     }
 }

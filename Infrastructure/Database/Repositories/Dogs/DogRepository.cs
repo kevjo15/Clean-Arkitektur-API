@@ -62,7 +62,22 @@ namespace Infrastructure.Database.Repository
 
         }
 
+        public async Task<IEnumerable<Dog>> GetByBreedAndWeightAsync(string breed, int? weight)
+        {
 
+                var query = _context.Dogs.AsQueryable();
 
+                if (!string.IsNullOrEmpty(breed))
+                {
+                    query = query.Where(c => c.Breed == breed);
+                }
+
+                if (weight.HasValue)
+                {
+                    query = query.Where(c => c.Weight >= weight.Value);
+                }
+
+                return await query.ToListAsync();
+        }
     }
 }

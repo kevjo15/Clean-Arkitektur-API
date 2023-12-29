@@ -6,6 +6,7 @@ using Application.Queries.Cats.GetById;
 using Application.Commands.Cats.AddCat;
 using Application.Commands.Cats.UpdateCat;
 using Application.Commands.Cats.DeleteCat;
+using Application.Queries.Cats.GetCatsByBreedAndWeight;
 
 namespace API.Controllers.CatsController
 {
@@ -67,6 +68,13 @@ namespace API.Controllers.CatsController
 
             return NotFound("Cat Finns inte med i listan"); // Om katten inte hittades, returnera NotFound
 
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetCatsByBreedAndWeight([FromQuery] string breed, [FromQuery] int? weight)
+        {
+            var query = new GetCatsByBreedAndWeightQuery(breed, weight);
+            var cats = await _mediator.Send(query);
+            return Ok(cats);
         }
     }
 }

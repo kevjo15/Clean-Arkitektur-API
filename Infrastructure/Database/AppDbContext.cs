@@ -45,15 +45,15 @@ namespace Infrastructure.Database
             );
             // Seed data
             modelBuilder.Entity<Cat>().HasData(
-            new Cat { Id = Guid.NewGuid(), Name = "Nemo", LikesToPlay = false },
-            new Cat { Id = Guid.NewGuid(), Name = "Doris", LikesToPlay = false },
-            new Cat { Id = Guid.NewGuid(), Name = "Simba", LikesToPlay = false }
+            new Cat { Id = Guid.NewGuid(), Name = "Nemo", LikesToPlay = false, Breed = "Siamese", Weight = 6 },
+            new Cat { Id = Guid.NewGuid(), Name = "Doris", LikesToPlay = false, Breed = "Persian", Weight = 5 },
+            new Cat { Id = Guid.NewGuid(), Name = "Simba", LikesToPlay = false, Breed = "BondeKatt", Weight = 10 }
             );
             // Seed data
             modelBuilder.Entity<Dog>().HasData(
-            new Dog { Id = Guid.NewGuid(), Name = "Björn" },
-            new Dog { Id = Guid.NewGuid(), Name = "Patrik" },
-            new Dog { Id = Guid.NewGuid(), Name = "Alfred" }
+            new Dog { Id = Guid.NewGuid(), Name = "Björn", Breed = "Labrador", Weight = 20 },
+            new Dog { Id = Guid.NewGuid(), Name = "Patrik", Breed = "Golden Retriver", Weight = 50 },
+            new Dog { Id = Guid.NewGuid(), Name = "Alfred", Breed = "Beagle", Weight = 15 }
             );
 
             base.OnModelCreating(modelBuilder);

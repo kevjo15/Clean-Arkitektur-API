@@ -40,6 +40,23 @@ namespace Infrastructure.Database.Repositories.Cats
             return await _context.Cats.ToListAsync();
         }
 
+        public async Task<IEnumerable<Cat>> GetByBreedAndWeightAsync(string breed, int? weight)
+        {
+            var query = _context.Cats.AsQueryable();
+
+            if (!string.IsNullOrEmpty(breed))
+            {
+                query = query.Where(c => c.Breed == breed);
+            }
+
+            if (weight.HasValue)
+            {
+                query = query.Where(c => c.Weight >= weight.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<Cat> GetByIdAsync(Guid catId)
         {
             return await _context.Cats.FindAsync(catId);

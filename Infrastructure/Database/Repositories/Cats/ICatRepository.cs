@@ -9,5 +9,6 @@ namespace Infrastructure.Database.Repositories.Cats
         Task UpdateAsync(Cat cat);
         Task DeleteAsync(Guid catId);
         Task<List<Cat>> GetAllCatsAsync();
+        Task<IEnumerable<Cat>> GetByBreedAndWeightAsync(string breed, int? weight);
     }
 }
