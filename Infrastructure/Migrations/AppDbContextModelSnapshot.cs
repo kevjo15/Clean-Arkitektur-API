@@ -83,26 +83,33 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("CanFly")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasDiscriminator().HasValue("Bird");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("902ce39e-ad27-4aea-84ee-9829c80a5957"),
+                            Id = new Guid("64e6fc0d-cc98-4471-866b-ebe9ce4427fa"),
                             Name = "Drake",
-                            CanFly = false
+                            CanFly = false,
+                            Color = "Svart"
                         },
                         new
                         {
-                            Id = new Guid("8ae07781-1c2c-40a1-89bf-7d7832dd6095"),
+                            Id = new Guid("c3dbeff4-eca1-4f27-b4be-8bf483414c54"),
                             Name = "Simon",
-                            CanFly = false
+                            CanFly = false,
+                            Color = "Brun"
                         },
                         new
                         {
-                            Id = new Guid("22f1b863-a4fa-46a2-b637-0e46aa14de6e"),
+                            Id = new Guid("e9974e8b-342b-40c0-a2c4-2a5713a15954"),
                             Name = "Gustav",
-                            CanFly = false
+                            CanFly = false,
+                            Color = "Vit"
                         });
                 });
 
@@ -125,7 +132,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b566961d-d570-487e-ba51-fe718c9336b1"),
+                            Id = new Guid("6a627a11-e4cf-4452-9f65-e8157336a53a"),
                             Name = "Nemo",
                             Breed = "Siamese",
                             LikesToPlay = false,
@@ -133,7 +140,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a76dbfb5-71c0-4995-b956-343327c36053"),
+                            Id = new Guid("79d0446d-f01f-4821-97ce-8b59f8b0abd0"),
                             Name = "Doris",
                             Breed = "Persian",
                             LikesToPlay = false,
@@ -141,7 +148,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d85bfc26-ab97-4a31-a96f-5291a2ffd7b4"),
+                            Id = new Guid("b7b3b501-2dda-4b78-acce-e6621fd792b6"),
                             Name = "Simba",
                             Breed = "BondeKatt",
                             LikesToPlay = false,
@@ -174,21 +181,21 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8fe661c4-68e3-4d7c-a500-a3429494e88f"),
+                            Id = new Guid("75d8e79b-0fd6-4809-8b9a-6bc380981822"),
                             Name = "Björn",
                             Breed = "Labrador",
                             Weight = 20
                         },
                         new
                         {
-                            Id = new Guid("50c6d480-e2f1-4951-87ad-380886414108"),
+                            Id = new Guid("13628268-6a69-41d3-a2fa-09e24b065081"),
                             Name = "Patrik",
                             Breed = "Golden Retriver",
                             Weight = 50
                         },
                         new
                         {
-                            Id = new Guid("9a270fa1-eab5-4463-8ced-5db94d130620"),
+                            Id = new Guid("0f6c387e-e3bd-4580-be7f-b2ef2f33be25"),
                             Name = "Alfred",
                             Breed = "Beagle",
                             Weight = 15

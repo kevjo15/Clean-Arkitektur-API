@@ -6,6 +6,7 @@ using Application.Queries.Birds.GetAll;
 using Application.Queries.Birds.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Application.Queries.Birds.GetByColor;
 
 namespace API.Controllers.BirdsController
 {
@@ -66,6 +67,14 @@ namespace API.Controllers.BirdsController
 
             return NotFound("Cat Finns inte med i listan"); // Om fågeln inte hittades, returnera NotFound
 
+        }
+        //GetByAttribute
+        [HttpGet("color/{color}")]
+        public async Task<IActionResult> GetBirdByAttribute(string color)
+        {
+            var query = new GetBirdByColorQuery(color);
+            var bird = await _mediator.Send(query);
+            return bird != null ? Ok(bird) : NotFound();
         }
     }
 

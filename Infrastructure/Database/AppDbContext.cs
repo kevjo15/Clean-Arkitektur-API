@@ -39,9 +39,9 @@ namespace Infrastructure.Database
         {
             // Seed data
             modelBuilder.Entity<Bird>().HasData(
-            new Bird { Id = Guid.NewGuid(), Name = "Drake", CanFly = false },
-            new Bird { Id = Guid.NewGuid(), Name = "Simon", CanFly = false },
-            new Bird { Id = Guid.NewGuid(), Name = "Gustav", CanFly = false }
+            new Bird { Id = Guid.NewGuid(), Name = "Drake", CanFly = false, Color = "Svart" },
+            new Bird { Id = Guid.NewGuid(), Name = "Simon", CanFly = false, Color = "Brun" },
+            new Bird { Id = Guid.NewGuid(), Name = "Gustav", CanFly = false, Color = "Vit" }
             );
             // Seed data
             modelBuilder.Entity<Cat>().HasData(

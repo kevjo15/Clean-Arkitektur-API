@@ -9,5 +9,6 @@ namespace Infrastructure.Database.Repositories.Birds
         Task UpdateAsync(Bird bird);
         Task DeleteAsync(Guid birdId);
         Task<List<Bird>> GetAllBirdAsync();
+        Task<List<Bird>> GetBirdByColorAsync(string color);
     }
 }

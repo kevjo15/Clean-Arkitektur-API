@@ -39,6 +39,14 @@ namespace Infrastructure.Database.Repositories.Birds
             return await _context.Birds.ToListAsync();
         }
 
+        public async Task<List<Bird>> GetBirdByColorAsync(string color)
+        {
+            return await _context.Birds
+            .OfType<Bird>()
+            .Where(b => b.Color == color)
+            .ToListAsync();
+        }
+
         public async Task<Bird> GetByIdAsync(Guid birdId)
         {
             return await _context.Birds.FindAsync(birdId);
