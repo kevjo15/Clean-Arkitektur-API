@@ -5,36 +5,43 @@ using Infrastructure.Database;
 using Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Queries.Dogs
 {
     public class GetAllDogsQueryHandler : IRequestHandler<GetAllDogsQuery, List<Dog>>
     {
-        //private readonly RealDatabase _mockDatabase;
-       // private readonly AppDbContext _appDbContext;
         private readonly IDogRepository _dogRepository;
+        private readonly ILogger<GetAllDogsQueryHandler> _logger;
 
-        public GetAllDogsQueryHandler(/*RealDatabase mockDatabase, AppDbContext appDbContext*/ IDogRepository dogRepository)
+        public GetAllDogsQueryHandler(IDogRepository dogRepository, ILogger<GetAllDogsQueryHandler> logger)
         {
-            //_mockDatabase = mockDatabase;
-            //_appDbContext = appDbContext; 
             _dogRepository = dogRepository;
+            _logger = logger;
         }
         public async Task<List<Dog>> Handle(GetAllDogsQuery request, CancellationToken cancellationToken)
         {
-            //List<Dog> allDogsFromMockDatabase = _mockDatabase.Dogs;
-            //return Task.FromResult(allDogsFromMockDatabase);
+            _logger.LogInformation("Retrieving all dogs from the database");
 
             List<Dog> allDogsDatabase = await _dogRepository.GetAllDogsAsync();
-            if(allDogsDatabase == null)
+
+            if (allDogsDatabase == null || allDogsDatabase.Count == 0)
             {
-                throw new InvalidOperationException("No Dogs was found!");
+                _logger.LogWarning("No dogs found in the database.");
+                return new List<Dog>(); // Returnera en tom lista istället för att kasta undantag
             }
+
+            _logger.LogInformation($"Retrieved {allDogsDatabase.Count} dogs from the database.");
 
             return allDogsDatabase;
 
-            //var dogs = await _appDbContext.Dogs.Select(d => new Dog { Id = d.Id, Name = d.Name }).ToListAsync();
-            //return dogs;
+            //List<Dog> allDogsDatabase = await _dogRepository.GetAllDogsAsync();
+            //if(allDogsDatabase == null)
+            //{
+            //    throw new InvalidOperationException("No Dogs was found!");
+            //}
+
+            //return allDogsDatabase;
         }
     }
 }

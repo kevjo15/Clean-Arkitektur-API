@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using Infrastructure.Database.Repositories.Users;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +14,42 @@ namespace Application.Queries.Users.GetById
     {
         private readonly IUserRepository _userRepository;
 
-        public GetUserByIdQueryHandler(IUserRepository userRepository)
+        private readonly ILogger<GetUserByIdQueryHandler> _logger;
+
+        public GetUserByIdQueryHandler(IUserRepository userRepository, ILogger<GetUserByIdQueryHandler> logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            User wantedUser = await _userRepository.GetByIdAsync(request.Id);
-            try
-            {
-                if (wantedUser == null)
-                {
-                    return null!;
+            _logger.LogInformation($"Retrieving user with ID: {request.Id}");
 
-                }
-                return wantedUser;
-            }
-            catch (Exception ex)
+            User wantedUser = await _userRepository.GetByIdAsync(request.Id);
+
+            if (wantedUser == null)
             {
-                throw new Exception(ex.Message);
+                _logger.LogWarning($"User with ID: {request.Id} was not found.");
+                return null; // Eller hantera det på annat sätt beroende på ditt API:s design
             }
+
+            return wantedUser;
+
+            //User wantedUser = await _userRepository.GetByIdAsync(request.Id);
+            //try
+            //{
+            //    if (wantedUser == null)
+            //    {
+            //        return null!;
+
+            //    }
+            //    return wantedUser;
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
 
         }
     }

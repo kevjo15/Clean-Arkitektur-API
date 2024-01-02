@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using Infrastructure.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +13,30 @@ namespace Application.Queries.Dogs.GetDogsByBreedAndWeight
     public class GetDogsByBreedAndWeightQueryHandler : IRequestHandler<GetDogsByBreedAndWeightQuery, IEnumerable<Dog>>
     {
         private readonly IDogRepository _dogRepository;
+        private readonly ILogger<GetDogsByBreedAndWeightQueryHandler> _logger;
 
-        public GetDogsByBreedAndWeightQueryHandler(IDogRepository dogRepository)
+        public GetDogsByBreedAndWeightQueryHandler(IDogRepository dogRepository, ILogger<GetDogsByBreedAndWeightQueryHandler> logger)
         {
             _dogRepository = dogRepository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Dog>> Handle(GetDogsByBreedAndWeightQuery request, CancellationToken cancellationToken)
         {
-            //if (request.Weight.HasValue && string.IsNullOrEmpty(request.Breed))
-            //{
-            //    // Hämta hundar baserat enbart på vikt
-            //    return await _dogRepository.GetDogsByWeightAsync(request.Weight.Value);
-            //}
-            //else
-            //{
-                // Hämta hundar baserat på både ras och vikt, eller enbart ras
-                return await _dogRepository.GetByBreedAndWeightAsync(request.Breed, request.Weight);
-            //}
+            _logger.LogInformation($"Retrieving dogs with breed: {request.Breed} and weight: {request.Weight}");
+
+            var dogs = await _dogRepository.GetByBreedAndWeightAsync(request.Breed, request.Weight);
+
+            if (dogs == null || !dogs.Any())
+            {
+                _logger.LogWarning("No dogs found matching the criteria.");
+                return new List<Dog>(); // Returnerar en tom lista istället för null
+            }
+
+            _logger.LogInformation($"Retrieved {dogs.Count()} dogs matching the criteria.");
+            return dogs;
+
+            //return await _dogRepository.GetByBreedAndWeightAsync(request.Breed, request.Weight);
         }
     }
 }

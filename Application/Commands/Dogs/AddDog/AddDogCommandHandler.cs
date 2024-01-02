@@ -3,50 +3,26 @@ using Domain.Models;
 using Infrastructure.Database;
 using Infrastructure.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Commands.Dogs
 {
     public class AddDogCommandHandler : IRequestHandler<AddDogCommand, Dog>
     {
-        //private readonly RealDatabase _mockDatabase;
-        //private readonly AppDbContext _appDbContext;
         private readonly IDogRepository _dogRepository;
+        private readonly ILogger<AddDogCommandHandler> _logger;
 
-        public AddDogCommandHandler(/*RealDatabase mockDatabase, AppDbContext appDbContext,*/ IDogRepository _dogRepositor)
+        public AddDogCommandHandler(IDogRepository dogRepository, ILogger<AddDogCommandHandler> logger)
         {
-            //_mockDatabase = mockDatabase;
-            //_appDbContext = appDbContext;
-            _dogRepository = _dogRepositor;
+            _dogRepository = dogRepository;
+            _logger = logger;
         }
 
         public async Task<Dog> Handle(AddDogCommand request, CancellationToken cancellationToken)
         {
-            //Dog dogToCreate = new()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Name = request.NewDog.Name
-            //};
+            _logger.LogInformation("Adding a new dog");
 
-            //_mockDatabase.Dogs.Add(dogToCreate);
-
-            //return Task.FromResult(dogToCreate);
-            //////////////////////////////////////
-
-            //Dog dogToCreate = new()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Name = request.NewDog.Name
-            //};
-
-            //_appDbContext.Dogs.Add(dogToCreate);
-
-            //await _appDbContext.SaveChangesAsync();
-
-            //return dogToCreate;
-
-            ////////////////////////////////////
-
-            Dog dogToCreate = new()
+            Dog dogToCreate = new Dog
             {
                 Id = Guid.NewGuid(),
                 Name = request.NewDog.Name,
@@ -54,9 +30,29 @@ namespace Application.Commands.Dogs
                 Weight = request.NewDog.Weight
             };
 
-            await _dogRepository.AddAsync(dogToCreate);
+            try
+            {
+                await _dogRepository.AddAsync(dogToCreate);
+                _logger.LogInformation($"New dog added with ID: {dogToCreate.Id}");
+                return dogToCreate;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding a new dog");
+                throw; // Kasta om undantaget för att det ska kunna hanteras uppåt i anropskedjan
+            }
 
-            return dogToCreate;
+            //Dog dogToCreate = new()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Name = request.NewDog.Name,
+            //    Breed = request.NewDog.Breed,
+            //    Weight = request.NewDog.Weight
+            //};
+
+            //await _dogRepository.AddAsync(dogToCreate);
+
+            //return dogToCreate;
         }
     }
 }
