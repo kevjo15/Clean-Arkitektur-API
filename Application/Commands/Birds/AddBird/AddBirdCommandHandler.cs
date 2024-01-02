@@ -18,7 +18,8 @@ namespace Application.Commands.Birds.AddBird
             Bird BirdToCreate = new()
             {
                 Id = Guid.NewGuid(),
-                Name = request.NewBird.Name
+                Name = request.NewBird.Name,
+                Color = request.NewBird.Color,
             };
             _birdRepository.AddAsync(BirdToCreate);
 

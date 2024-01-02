@@ -44,6 +44,7 @@ namespace Infrastructure.Database.Repositories.Birds
             return await _context.Birds
             .OfType<Bird>()
             .Where(b => b.Color == color)
+            .OrderByDescending(b => b.Name)
             .ToListAsync();
         }
 
