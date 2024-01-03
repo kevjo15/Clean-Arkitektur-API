@@ -2,6 +2,7 @@
 using Domain.Models;
 using Infrastructure.Database.Repositories.UserAnimalRepository;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,35 +14,74 @@ namespace Application.Queries.UserAnimal
     public class GetAllUsersWithAnimalsQueryHandler : IRequestHandler<GetAllUsersWithAnimalsQuery, IEnumerable<UserAnimalDto>>
     {
         private readonly IUserAnimalRepository _repository;
+        private readonly ILogger<GetAllUsersWithAnimalsQueryHandler> _logger;
 
-        public GetAllUsersWithAnimalsQueryHandler(IUserAnimalRepository repository)
+        public GetAllUsersWithAnimalsQueryHandler(IUserAnimalRepository repository, ILogger<GetAllUsersWithAnimalsQueryHandler> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<UserAnimalDto>> Handle(GetAllUsersWithAnimalsQuery request, CancellationToken cancellationToken)
         {
-            var users = await _repository.GetAllUsersWithAnimalsAsync();
 
-            var userAnimalDtos = users.Select(user => new UserAnimalDto
+
+            try
             {
-                UserId = user.Id,
-                UserName = user.UserName,
-                Dogs = user.UserAnimals
-                    .Where(ua => ua.AnimalModel is Dog)
-                    .Select(ua => new DogDto { Name = ua.AnimalModel.Name })
-                    .ToList(),
-                Cats = user.UserAnimals
-                    .Where(ua => ua.AnimalModel is Cat)
-                    .Select(ua => new CatDto { Name = ua.AnimalModel.Name, LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay })
-                    .ToList(),
-                Birds = user.UserAnimals
-                    .Where(ua => ua.AnimalModel is Bird)
-                    .Select(ua => new BirdDto { Name = ua.AnimalModel.Name, CanFly = ((Bird)ua.AnimalModel).CanFly })
-                    .ToList(),
-            });
+                _logger.LogInformation("Starting to process GetAllUsersWithAnimalsQuery.");
 
-            return userAnimalDtos;
+                var users = await _repository.GetAllUsersWithAnimalsAsync();
+
+                var userAnimalDtos = users.Select(user => new UserAnimalDto
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Dogs = user.UserAnimals
+                        .Where(ua => ua.AnimalModel is Dog)
+                        .Select(ua => new DogDto { Name = ua.AnimalModel.Name })
+                        .ToList(),
+                    Cats = user.UserAnimals
+                        .Where(ua => ua.AnimalModel is Cat)
+                        .Select(ua => new CatDto { Name = ua.AnimalModel.Name, LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay })
+                        .ToList(),
+                    Birds = user.UserAnimals
+                        .Where(ua => ua.AnimalModel is Bird)
+                        .Select(ua => new BirdDto { Name = ua.AnimalModel.Name, CanFly = ((Bird)ua.AnimalModel).CanFly })
+                        .ToList(),
+                });
+
+                _logger.LogInformation($"Retrieved {users.Count()} users with animals from the database.");
+                return userAnimalDtos;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all users with animals from the database");
+                return new List<UserAnimalDto>();
+            }
+
+
+
+            //var users = await _repository.GetAllUsersWithAnimalsAsync();
+
+            //var userAnimalDtos = users.Select(user => new UserAnimalDto
+            //{
+            //    UserId = user.Id,
+            //    UserName = user.UserName,
+            //    Dogs = user.UserAnimals
+            //        .Where(ua => ua.AnimalModel is Dog)
+            //        .Select(ua => new DogDto { Name = ua.AnimalModel.Name })
+            //        .ToList(),
+            //    Cats = user.UserAnimals
+            //        .Where(ua => ua.AnimalModel is Cat)
+            //        .Select(ua => new CatDto { Name = ua.AnimalModel.Name, LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay })
+            //        .ToList(),
+            //    Birds = user.UserAnimals
+            //        .Where(ua => ua.AnimalModel is Bird)
+            //        .Select(ua => new BirdDto { Name = ua.AnimalModel.Name, CanFly = ((Bird)ua.AnimalModel).CanFly })
+            //        .ToList(),
+            //});
+
+            //return userAnimalDtos;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Application.Queries.Users.GetByUsername
     public class FindUserByUsernameQuery : IRequest<User>
     {
         public string Username { get; set; }
-        public FindUserByUsernameQuery(string username) 
+        public FindUserByUsernameQuery(string username)
         {
             Username = username;
         }

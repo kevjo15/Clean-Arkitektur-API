@@ -20,26 +20,43 @@ namespace Application.Queries.Birds.GetAll
         }
         public async Task<List<Bird>> Handle(GetAllBirdsQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Retrieving all birds from the database");
 
-            List<Bird> allBirdsDatabase = await _birdRepository.GetAllBirdAsync();
-
-            if (allBirdsDatabase == null || allBirdsDatabase.Count == 0)
+            try
             {
-                _logger.LogWarning("No birds found in the database.");
-                return new List<Bird>(); // Returnera en tom lista istället för att kasta undantag
+                _logger.LogInformation("Retrieving all birds from the database");
+
+                var allBirdsDatabase = await _birdRepository.GetAllBirdAsync();
+
+                if (allBirdsDatabase == null || allBirdsDatabase.Count == 0)
+                {
+                    _logger.LogWarning("No birds found in the database.");
+                    return new List<Bird>(); // Returnerar en tom lista
+                }
+
+                _logger.LogInformation($"Retrieved {allBirdsDatabase.Count} birds from the database.");
+                return allBirdsDatabase;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all birds from the database");
+                return new List<Bird>(); // Returnerar en tom lista vid undantag
             }
 
-            _logger.LogInformation($"Retrieved {allBirdsDatabase.Count} birds from the database.");
-            return allBirdsDatabase;
+
+            //_logger.LogInformation("Retrieving all birds from the database");
 
             //List<Bird> allBirdsDatabase = await _birdRepository.GetAllBirdAsync();
-            //if (allBirdsDatabase == null)
+
+            //if (allBirdsDatabase == null || allBirdsDatabase.Count == 0)
             //{
-            //    throw new InvalidOperationException("No Bird was found!");
+            //    _logger.LogWarning("No birds found in the database.");
+            //    return new List<Bird>(); // Returnera en tom lista istället för att kasta undantag
             //}
 
+            //_logger.LogInformation($"Retrieved {allBirdsDatabase.Count} birds from the database.");
             //return allBirdsDatabase;
+
+
         }
     }
 }

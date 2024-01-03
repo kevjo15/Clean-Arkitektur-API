@@ -13,7 +13,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddSingleton<RealDatabase>();
+            services.AddSingleton<FakeDatabase>();
             services.AddScoped<IDogRepository, DogRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICatRepository, CatRepository>();

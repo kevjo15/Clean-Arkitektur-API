@@ -69,5 +69,5 @@ namespace Infrastructure.Database.Repositories.Cats
         }
     }
 }
-    
+
 

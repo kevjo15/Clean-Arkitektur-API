@@ -16,7 +16,7 @@ namespace Infrastructure.Database.Repositories.Users
         private readonly AppDbContext _context;
         public UserRepository(AppDbContext appDBContext)
         {
-            _context = appDBContext;    
+            _context = appDBContext;
         }
         public async Task<User> AddAsync(User userToCreate)
         {
@@ -28,7 +28,7 @@ namespace Infrastructure.Database.Repositories.Users
         public async Task DeleteAsync(Guid userId)
         {
             var userToDelete = await _context.Users.FindAsync(userId);
-            if (userToDelete != null) 
+            if (userToDelete != null)
             {
                 _context.Users.Remove(userToDelete);
                 await _context.SaveChangesAsync();

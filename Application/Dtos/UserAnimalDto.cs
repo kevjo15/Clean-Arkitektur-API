@@ -16,6 +16,6 @@ namespace Application.Dtos
         public List<CatDto> Cats { get; set; }
         public List<BirdDto> Birds { get; set; }
 
-        
+
     }
 }

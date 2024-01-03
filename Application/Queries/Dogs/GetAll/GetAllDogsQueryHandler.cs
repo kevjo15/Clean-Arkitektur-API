@@ -21,19 +21,46 @@ namespace Application.Queries.Dogs
         }
         public async Task<List<Dog>> Handle(GetAllDogsQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Retrieving all dogs from the database");
 
-            List<Dog> allDogsDatabase = await _dogRepository.GetAllDogsAsync();
-
-            if (allDogsDatabase == null || allDogsDatabase.Count == 0)
+            try
             {
-                _logger.LogWarning("No dogs found in the database.");
-                return new List<Dog>(); // Returnera en tom lista istället för att kasta undantag
+                _logger.LogInformation("Retrieving all dogs from the database");
+
+                var allDogsDatabase = await _dogRepository.GetAllDogsAsync();
+
+                if (allDogsDatabase == null || allDogsDatabase.Count == 0)
+                {
+                    _logger.LogWarning("No dogs found in the database.");
+                    return new List<Dog>(); // Returnerar en tom lista om inga hundar hittades
+                }
+
+                _logger.LogInformation($"Retrieved {allDogsDatabase.Count} dogs from the database.");
+
+                return allDogsDatabase;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all dogs from the database");
+                return new List<Dog>(); // Returnerar en tom lista om ett undantag inträffar
             }
 
-            _logger.LogInformation($"Retrieved {allDogsDatabase.Count} dogs from the database.");
+            //_logger.LogInformation("Retrieving all dogs from the database");
 
-            return allDogsDatabase;
+            //List<Dog> allDogsDatabase = await _dogRepository.GetAllDogsAsync();
+
+            //if (allDogsDatabase == null || allDogsDatabase.Count == 0)
+            //{
+            //    _logger.LogWarning("No dogs found in the database.");
+            //    return new List<Dog>(); // Returnera en tom lista istället för att kasta undantag
+            //}
+
+            //_logger.LogInformation($"Retrieved {allDogsDatabase.Count} dogs from the database.");
+
+            //return allDogsDatabase;
+
+
+
+
 
             //List<Dog> allDogsDatabase = await _dogRepository.GetAllDogsAsync();
             //if(allDogsDatabase == null)

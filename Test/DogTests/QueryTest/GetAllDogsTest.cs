@@ -1,10 +1,15 @@
-﻿using Application.Queries.Dogs;
+﻿using API.Controllers.DogsController;
+using Application.Dtos;
+using Application.Queries.Dogs;
 using Application.Queries.Dogs.GetAll;
 using Domain.Models;
 using FluentAssertions;
 using Infrastructure.Database;
+using Infrastructure.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -20,53 +25,55 @@ namespace Test.DogTests.QueryTest
     [TestFixture]
     public class GetAllDogsTest
     {
+        private Mock<IDogRepository> _dogRepositoryMock;
         private GetAllDogsQueryHandler _handler;
-        private RealDatabase _RealDatabase;
-        //private AppDbContext _AppDbContext;
-        private Mock<AppDbContext> _AppDbContextMock;
-        private Mock<DbSet<Dog>> _DbSetMock;
+        private Mock<ILogger<GetAllDogsQueryHandler>> _loggerMock;
+
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
-            // Initialize the handler and mock database before each test
-            //_RealDatabase = new RealDatabase();
-            _AppDbContextMock = new Mock<AppDbContext>();
-            _DbSetMock = new Mock<DbSet<Dog>>();
-
-            
-
-            _handler = new GetAllDogsQueryHandler(_AppDbContextMock.Object);
+            _dogRepositoryMock = new Mock<IDogRepository>();
+            _loggerMock = new Mock<ILogger<GetAllDogsQueryHandler>>();
+            _handler = new GetAllDogsQueryHandler(_dogRepositoryMock.Object, _loggerMock.Object);
         }
+
         [Test]
-        public async Task GetAllDogs_ShouldReturnListOfDog()
+        public async Task GetAllDogs_WhenDogsExist_ReturnsAllDogs()
         {
             // Arrange
-            var fakeDogs = new List<Dog>
-        {
-            new Dog { Id = Guid.NewGuid(), Name = "Buddy" },
-            new Dog { Id = Guid.NewGuid(), Name = "Charlie" },
-            // Add more fake dogs as needed
-        }.AsQueryable();
+            var fakeDogs = new List<Dog> { new Dog(), new Dog() }; // Använd Dog istället för DogDto
+            _dogRepositoryMock.Setup(repo => repo.GetAllDogsAsync())
+                              .ReturnsAsync(fakeDogs); // Returnerar Task<List<Dog>>
 
-            _DbSetMock.As<IQueryable<Dog>>().Setup(m => m.Provider).Returns(fakeDogs.Provider);
-            _DbSetMock.As<IQueryable<Dog>>().Setup(m => m.Expression).Returns(fakeDogs.Expression);
-            _DbSetMock.As<IQueryable<Dog>>().Setup(m => m.ElementType).Returns(fakeDogs.ElementType);
-            _DbSetMock.As<IQueryable<Dog>>().Setup(m => m.GetEnumerator()).Returns(() => fakeDogs.GetEnumerator());
-
-            _AppDbContextMock.Setup(m => m.Dogs).Returns(_DbSetMock.Object);
             // Act
-            var result = await _handler.Handle(new GetAllDogsQuery(), CancellationToken.None);
+            var query = new GetAllDogsQuery();
+            var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            //Assert.NotNull(result);
-            //Assert.IsInstanceOf<List<Dog>>(result);
+            Assert.That(result.Count, Is.EqualTo(2)); // Kontrollerar antal hundar
+            _dogRepositoryMock.Verify(repo => repo.GetAllDogsAsync(), Times.Once); // Kontrollerar att metoden kallades en gång
+        }
+        [Test]
+        public async Task GetAllDogs_WhenRepositoryThrowsException_ReturnsEmptyList()
+        {
+            // Arrange
+            _dogRepositoryMock.Setup(repo => repo.GetAllDogsAsync())
+                              .ThrowsAsync(new Exception("Database error"));
 
-            result.Should().NotBeNull();
-            result.Should().BeOfType<List<Dog>>();
-            result.Should().HaveCount(fakeDogs.Count());
+            // Act
+            var query = new GetAllDogsQuery();
+            var result = await _handler.Handle(query, CancellationToken.None);
 
-            //var dogs = (List<Dog>)result;
-            //Assert.That(dogs.Count, Is.EqualTo(_AppDbContextMock.Object.Dogs.Count()));
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+            _loggerMock.Verify(logger => logger.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
         }
     }
 }

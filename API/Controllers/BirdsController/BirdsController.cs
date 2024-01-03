@@ -35,7 +35,7 @@ namespace API.Controllers.BirdsController
             {
                 return Ok(await _mediator.Send(new GetAllBirdsQuery()));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return StatusCode(500, $"{ex}, Ett internt serverfel inträffade");
             }

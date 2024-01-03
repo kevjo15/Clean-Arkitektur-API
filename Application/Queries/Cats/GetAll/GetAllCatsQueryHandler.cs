@@ -17,25 +17,41 @@ namespace Application.Queries.Cats.GetAll
 
         public async Task<List<Cat>> Handle(GetAllCatsQuery request, CancellationToken cancellationToken)
         {
-            //List<Cat> allCatsDatabase = await _catRepository.GetAllCatsAsync();
-            //if (allCatsDatabase == null)
-            //{
-            //    throw new InvalidOperationException("No Cats was found!");
-            //}
 
-            //return allCatsDatabase;
             _logger.LogInformation("Starting to process GetAllCatsQuery.");
 
-            var allCatsDatabase = await _catRepository.GetAllCatsAsync();
-
-            if (allCatsDatabase == null || allCatsDatabase.Count == 0)
+            try
             {
-                _logger.LogWarning("No cats found in the database.");
-                return new List<Cat>(); // Returnera en tom lista
+                var allCatsDatabase = await _catRepository.GetAllCatsAsync();
+
+                if (allCatsDatabase == null || allCatsDatabase.Count == 0)
+                {
+                    _logger.LogWarning("No cats found in the database.");
+                    return new List<Cat>(); // Returnerar en tom lista om inga katter hittades
+                }
+
+                _logger.LogInformation($"Retrieved {allCatsDatabase.Count} cats from the database.");
+                return allCatsDatabase;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all cats from the database");
+                return new List<Cat>(); // Returnerar en tom lista om ett undantag inträffar
             }
 
-            _logger.LogInformation($"Retrieved {allCatsDatabase.Count} cats from the database.");
-            return allCatsDatabase;
+
+            //_logger.LogInformation("Starting to process GetAllCatsQuery.");
+
+            //var allCatsDatabase = await _catRepository.GetAllCatsAsync();
+
+            //if (allCatsDatabase == null || allCatsDatabase.Count == 0)
+            //{
+            //    _logger.LogWarning("No cats found in the database.");
+            //    return new List<Cat>(); // Returnera en tom lista
+            //}
+
+            //_logger.LogInformation($"Retrieved {allCatsDatabase.Count} cats from the database.");
+            //return allCatsDatabase;
         }
     }
 }

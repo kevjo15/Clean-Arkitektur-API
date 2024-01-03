@@ -23,25 +23,39 @@ namespace Application.Queries.Users.GetAll
         }
         public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Retrieving all users from the database");
 
-            List<User> allUsersDatabase = await _userRepository.GetAllUsersAsync();
-
-            if (allUsersDatabase == null || allUsersDatabase.Count == 0)
+            try
             {
-                _logger.LogWarning("No users found in the database.");
-                return new List<User>(); // Returnera en tom lista istället för att kasta undantag
+                _logger.LogInformation("Retrieving all users from the database");
+
+                var allUsersDatabase = await _userRepository.GetAllUsersAsync();
+
+                if (allUsersDatabase == null || allUsersDatabase.Count == 0)
+                {
+                    _logger.LogWarning("No users found in the database.");
+                    return new List<User>(); // Returnerar en tom lista
+                }
+
+                _logger.LogInformation($"Retrieved {allUsersDatabase.Count} users from the database.");
+                return allUsersDatabase;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all users from the database");
+                return new List<User>(); // Returnerar en tom lista vid undantag
             }
 
-            _logger.LogInformation($"Retrieved {allUsersDatabase.Count} users from the database.");
-            return allUsersDatabase;
+            //_logger.LogInformation("Retrieving all users from the database");
 
             //List<User> allUsersDatabase = await _userRepository.GetAllUsersAsync();
-            //if (allUsersDatabase == null)
+
+            //if (allUsersDatabase == null || allUsersDatabase.Count == 0)
             //{
-            //    throw new InvalidOperationException("No Dogs was found!");
+            //    _logger.LogWarning("No users found in the database.");
+            //    return new List<User>(); // Returnera en tom lista istället för att kasta undantag
             //}
 
+            //_logger.LogInformation($"Retrieved {allUsersDatabase.Count} users from the database.");
             //return allUsersDatabase;
         }
     }
