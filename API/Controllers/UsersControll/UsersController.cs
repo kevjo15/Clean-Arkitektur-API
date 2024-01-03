@@ -9,6 +9,7 @@ using Application.Commands.Users.DeleteUser;
 using Application.Commands.Users.UpdateUser;
 using Application.Queries.Users.GetById;
 using Application.Queries.Users.GetAll;
+using Application.Validators;
 
 
 namespace API.Controllers.Usercontroller
@@ -18,12 +19,14 @@ namespace API.Controllers.Usercontroller
     [ApiController]
     public class UsersController : ControllerBase
     {
-
         internal readonly IMediator _mediator;
-
-        public UsersController(IMediator mediator)
+        private readonly UserValidator _userValidator;
+        private readonly GuidValidator _guidValidator;
+        public UsersController(IMediator mediator, UserValidator userValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
+            _userValidator = userValidator;
+            _guidValidator = guidValidator;
         }
 
 
@@ -33,7 +36,15 @@ namespace API.Controllers.Usercontroller
         [Route("getAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            return Ok(await _mediator.Send(new GetAllUsersQuery()));
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllUsersQuery()));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
         // ------------------------------------------------------------------------------------------------------
         // Get User by Id
@@ -41,20 +52,24 @@ namespace API.Controllers.Usercontroller
         [Route("getUserById")]
         public async Task<IActionResult> GetUserById(Guid UserId)
         {
-            //var validatedId = _guidValidator.Validate(UserId);
-            //if (!validatedId.IsValid)
-            //{
-            //    return BadRequest(validatedId.Errors.ConvertAll(error => error.ErrorMessage));
-            //}
+            var validatedId = _guidValidator.Validate(UserId);
+            if (!validatedId.IsValid)
+            {
+                return BadRequest(validatedId.Errors.ConvertAll(error => error.ErrorMessage));
+            }
 
-            try
-            {
-                return Ok(await _mediator.Send(new GetUserByIdQuery(UserId)));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            var user = await _mediator.Send(new GetUserByIdQuery(UserId));
+            return user != null ? Ok(user) : NotFound("User not found.");
+
+            //try
+            //{
+            //    return Ok(await _mediator.Send(new GetUserByIdQuery(UserId)));
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
         }
         // ------------------------------------------------------------------------------------------------------
         // Update Specific User
@@ -62,6 +77,14 @@ namespace API.Controllers.Usercontroller
         [Route("updateUser/{updatedUserId}")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDto updatedUserDto, Guid updatedUserId, string newPassword)
         {
+            var userValidationResult = _userValidator.Validate(updatedUserDto);
+            var guidValidationResult = _guidValidator.Validate(updatedUserId);
+
+            if (!userValidationResult.IsValid || !guidValidationResult.IsValid)
+            {
+                return BadRequest("Ogiltig data för uppdatering.");
+            }
+
             try
             {
                 var command = new UpdateUserByIdCommand(updatedUserDto, updatedUserId, newPassword);
@@ -96,13 +119,22 @@ namespace API.Controllers.Usercontroller
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteUserById(Guid id)
         {
-            var user = await _mediator.Send(new DeleteUserByIdCommand(id));
-
-            if (user != null)
+            var guidValidationResult = _guidValidator.Validate(id);
+            if (!guidValidationResult.IsValid)
             {
-                return NoContent();
+                return BadRequest("Ogiltigt User ID angivet.");
             }
-            return NotFound();
+
+            var result = await _mediator.Send(new DeleteUserByIdCommand(id));
+            return result != null ? NoContent() : NotFound("User not found.");
+
+            //var user = await _mediator.Send(new DeleteUserByIdCommand(id));
+
+            //if (user != null)
+            //{
+            //    return NoContent();
+            //}
+            //return NotFound();
         }
         // ------------------------------------------------------------------------------------------------------
 

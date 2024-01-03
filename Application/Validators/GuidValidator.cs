@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Validators.Dog
+namespace Application.Validators
 {
     public class GuidValidator : AbstractValidator<Guid>
     {

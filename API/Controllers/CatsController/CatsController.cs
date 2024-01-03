@@ -7,6 +7,7 @@ using Application.Commands.Cats.AddCat;
 using Application.Commands.Cats.UpdateCat;
 using Application.Commands.Cats.DeleteCat;
 using Application.Queries.Cats.GetCatsByBreedAndWeight;
+using Application.Validators;
 
 namespace API.Controllers.CatsController
 {
@@ -16,10 +17,15 @@ namespace API.Controllers.CatsController
     {
         internal readonly IMediator _mediator;
         private readonly ILogger<CatsController> _logger;
-        public CatsController(IMediator mediator, ILogger<CatsController> logger)
+        private readonly CatValidator _catValidator;
+        private readonly GuidValidator _guidValidator;
+
+        public CatsController(IMediator mediator, ILogger<CatsController> logger, CatValidator catValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
             _logger = logger;
+            _catValidator = catValidator;
+            _guidValidator = guidValidator;
         }
 
         // Get all Cats from database
@@ -45,14 +51,13 @@ namespace API.Controllers.CatsController
         [Route("getCatById/{catId}")]
         public async Task<IActionResult> GetCatById(Guid catId)
         {
-            //try
-            //{
-            //    return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
+            var validationResult = _guidValidator.Validate(catId);
+            if (!validationResult.IsValid)
+            {
+                _logger.LogWarning("Ogiltigt Cat ID förfrågan.");
+                return BadRequest("Ogiltigt Cat ID förfrågan.");
+            }
+
             try
             {
                 _logger.LogInformation($"Attempting to get cat with ID: {catId}");
@@ -76,6 +81,14 @@ namespace API.Controllers.CatsController
         [Route("addNewCat")]
         public async Task<IActionResult> AddCat([FromBody] CatDto newCat)
         {
+            var validator = new CatValidator();
+            var validationResult = validator.Validate(newCat);
+
+            if (!validationResult.IsValid)
+            {
+                _logger.LogWarning("Validering misslyckades vid tillägg av en ny katt.");
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+            }
             try
             {
                 _logger.LogInformation("Försöker lägga till en ny katt");
@@ -94,6 +107,14 @@ namespace API.Controllers.CatsController
         [Route("updateCat/{updatedCatId}")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
+            var catValidationResult = _catValidator.Validate(updatedCat);
+            var guidValidationResult = _guidValidator.Validate(updatedCatId);
+
+            if (!catValidationResult.IsValid || !guidValidationResult.IsValid)
+            {
+                _logger.LogInformation("Ogiltig data för uppdatering.");
+                return BadRequest("Ogiltig data för uppdatering.");
+            }
             try
             {
                 _logger.LogInformation($"Försöker uppdatera katt med ID: {updatedCatId}");
@@ -129,6 +150,13 @@ namespace API.Controllers.CatsController
             try
             {
                 _logger.LogInformation($"Försöker radera katt med ID: {Id}");
+                var validationResult = _guidValidator.Validate(Id);
+                if (!validationResult.IsValid)
+                {
+                    _logger.LogWarning("Ogiltigt Cat ID förfrågan vid borttagning.");
+                    return BadRequest("Ogiltigt Cat ID angivet.");
+                }
+
                 var result = await _mediator.Send(new DeleteCatByIdCommand(Id));
                 if (result == null)
                 {

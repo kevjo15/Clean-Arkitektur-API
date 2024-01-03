@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Queries.Users.GetByUsername;
+using Application.Validators;
 using Application.Validators.Dog;
 using Domain.Models;
 using Infrastructure.Database.Repositories.Users;
@@ -22,23 +23,20 @@ namespace API.Controllers.AuthController
     {
         private readonly IUserRepository _userRepository;
         private readonly IMediator _mediator;
+        private readonly UserValidator _userValidator;
+        private readonly IConfiguration _configuration; // Configuration object to access settings like JWT parameters.
 
-
-        public AuthController(IMediator mediator, IConfiguration configuration, IUserRepository userRepository)
+        public AuthController(IMediator mediator, IConfiguration configuration, IUserRepository userRepository, UserValidator userValidator)
         {
             _mediator = mediator;
             _configuration = configuration;
             _userRepository = userRepository;
+            _userValidator = userValidator;
 
         }
 
-
         // A static user instance for demonstration. In a real application, you'd use a database.
         public static User user = new User();
-
-        // Configuration object to access settings like JWT parameters.
-        private readonly IConfiguration _configuration;
-
 
         // ------------------------------------------------------------------------------------------------------
         // Endpoint for registering a new user.
@@ -46,6 +44,12 @@ namespace API.Controllers.AuthController
         [HttpPost("register")]
         public ActionResult<User> Register(UserDto request)
         {
+            var validationResult = _userValidator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             // Hashes the password using BCrypt for security.
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
@@ -63,6 +67,11 @@ namespace API.Controllers.AuthController
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDto request)
         {
+            var validationResult = _userValidator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             var user = await _mediator.Send(new FindUserByUsernameQuery(request.Username));
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.UserPassword))
