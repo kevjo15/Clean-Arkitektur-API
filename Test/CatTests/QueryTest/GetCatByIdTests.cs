@@ -1,57 +1,65 @@
-﻿//using Application.Queries.Cats.GetById;
-//using Infrastructure.Database;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Application.Queries.Cats.GetById;
+using Domain.Models;
+using Infrastructure.Database;
+using Infrastructure.Database.Repositories.Cats;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Test.CatTests.QueryTest
-//{
-//    [TestFixture]
-//    public class GetCatByIdTests
-//    {
-//        private GetCatByIdQueryHandler _handler;
-//        private FakeDatabase _RealDatabase;
+namespace Test.CatTests.QueryTest
+{
+    [TestFixture]
+    public class GetCatByIdTests
+    {
+        private Mock<ICatRepository> _catRepositoryMock;
+        private GetCatByIdQueryHandler _handler;
+        private Mock<ILogger<GetCatByIdQueryHandler>> _loggerMock;
 
-//        [SetUp]
-//        public void SetUp()
-//        {
-//            // Initialize the handler and mock database before each test
-//            _RealDatabase = new FakeDatabase();
-//            _handler = new GetCatByIdQueryHandler(_RealDatabase);
-//        }
+        [SetUp]
+        public void SetUp()
+        {
+            _catRepositoryMock = new Mock<ICatRepository>();
+            _loggerMock = new Mock<ILogger<GetCatByIdQueryHandler>>();
+            _handler = new GetCatByIdQueryHandler(_catRepositoryMock.Object, _loggerMock.Object);
+        }
 
-//        // GetCatById
-//        [Test]
-//        public async Task Handle_ValidId_ReturnsCorrectCat()
-//        {
-//            // Arrange
-//            var catId = new Guid("12345678-1234-5678-1234-567812345677");
+        [Test]
+        public async Task Handle_ValidId_ReturnsCorrectCat()
+        {
+            // Arrange
+            var catId = Guid.NewGuid();
+            var cat = new Cat { Id = catId, Name = "Whiskers" };
+            _catRepositoryMock.Setup(repo => repo.GetByIdAsync(catId)).ReturnsAsync(cat);
 
-//            var query = new GetCatByIdQuery(catId);
+            var query = new GetCatByIdQuery(catId);
 
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
 
-//            // Assert
-//            Assert.NotNull(result);
-//            Assert.That(result.Id, Is.EqualTo(catId));
-//        }
-//        // GetDogById
-//        [Test]
-//        public async Task Handle_InvalidId_ReturnsNull()
-//        {
-//            // Arrange
-//            var invalidCatId = Guid.NewGuid();
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(catId, result.Id);
+            Assert.AreEqual("Whiskers", result.Name);
+        }
 
-//            var query = new GetCatByIdQuery(invalidCatId);
+        [Test]
+        public async Task Handle_InvalidId_ReturnsNull()
+        {
+            // Arrange
+            var invalidCatId = Guid.NewGuid();
+            _catRepositoryMock.Setup(repo => repo.GetByIdAsync(invalidCatId)).ReturnsAsync((Cat)null);
 
-//            // Act
-//            var result = await _handler.Handle(query, CancellationToken.None);
+            var query = new GetCatByIdQuery(invalidCatId);
 
-//            // Assert
-//            Assert.IsNull(result);
-//        }
-//    }
-//}
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+    }
+}

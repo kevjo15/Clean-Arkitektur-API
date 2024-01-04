@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test.UserTests
+namespace Test.UserTests.QueryTest
 {
     [TestFixture]
     public class GetAllUsersTests

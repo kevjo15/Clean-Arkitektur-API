@@ -1,52 +1,69 @@
 ﻿using Application.Commands.Dogs;
 using Application.Dtos;
+using Domain.Models;
 using Infrastructure.Database;
+using Infrastructure.Interfaces;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace Test.DogTests.CommandTest
 {
     [TestFixture]
     public class AddDogTests
     {
-        //private RealDatabase _RealDatabase;
-        //private AddDogCommandHandler _handler;
+        private Mock<IDogRepository> _dogRepositoryMock;
+        private AddDogCommandHandler _handler;
+        private Mock<ILogger<AddDogCommandHandler>> _loggerMock;
 
-        //[SetUp]
-        //public void SetUp()
-        //{
-        //    // Initialisera mockdatabasen och hanteraren innan varje test
-        //    _RealDatabase = new RealDatabase();
-        //    _handler = new AddDogCommandHandler(_RealDatabase);
-        //}
+        [SetUp]
+        public void SetUp()
+        {
+            _dogRepositoryMock = new Mock<IDogRepository>();
+            _loggerMock = new Mock<ILogger<AddDogCommandHandler>>();
+            _handler = new AddDogCommandHandler(_dogRepositoryMock.Object, _loggerMock.Object);
+        }
 
-        //[Test]
-        //public async Task Handle_ValidAddDog_ReturnsTrue()
-        //{
-        //    // Arrange
-        //    var command = new AddDogCommand(new DogDto { Name = "New Dog" });
+        [Test]
+        public async Task Handle_ValidRequest_AddsDog()
+        {
+            // Arrange
+            var newDogDto = new DogDto { Name = "Buddy", Breed = "Labrador", Weight = 30 };
+            var command = new AddDogCommand(newDogDto);
 
-        //    // Act
-        //    var result = await _handler.Handle(command, CancellationToken.None);
+            var createdDog = new Dog
+            {
+                Id = Guid.NewGuid(), // Låt Id genereras dynamiskt
+                Name = newDogDto.Name,
+                Breed = newDogDto.Breed,
+                Weight = newDogDto.Weight
+            };
 
-        //    // Assert
-        //    var newdoginDB = _RealDatabase.Dogs.FirstOrDefault(dog => dog.Name == "New Dog");
+            _dogRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Dog>())).ReturnsAsync(createdDog);
 
-        //    Assert.IsNotNull(newdoginDB);
-        //    Assert.That(newdoginDB.Name, Is.EqualTo("New Dog"));
-        //}
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
 
-        //[Test]
-        //public async Task Handle_invalidAddDog_ReturnsTrue()
-        //{
-        //    // Arrange
-        //    var command = new AddDogCommand(new DogDto { Name = "" });
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(newDogDto.Name, result.Name);
+            Assert.AreEqual(newDogDto.Breed, result.Breed);
+            Assert.AreEqual(newDogDto.Weight, result.Weight);
+        }
 
-        //    // Act
-        //    var result = await _handler.Handle(command, CancellationToken.None);
+        [Test]
+        public void Handle_AddThrowsException_ThrowsException()
+        {
+            // Arrange
+            var newDogDto = new DogDto { Name = "Buddy", Breed = "Labrador", Weight = 30 };
+            var command = new AddDogCommand(newDogDto);
 
-        //    // Assert
-        //    Assert.IsNotNull(result);
+            _dogRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Dog>()))
+                              .ThrowsAsync(new InvalidOperationException("Test Exception"));
 
-        //}
+            // Act & Assert
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
+
 
     }
 }

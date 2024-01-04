@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test.UserAnimalTests
+namespace Test.UserAnimalTests.QueryTest
 {
     [TestFixture]
     public class GetAllUsersWithAnimalsTests
