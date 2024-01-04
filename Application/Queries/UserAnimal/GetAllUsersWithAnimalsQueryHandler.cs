@@ -38,16 +38,29 @@ namespace Application.Queries.UserAnimal
                     UserName = user.UserName,
                     Dogs = user.UserAnimals
                         .Where(ua => ua.AnimalModel is Dog)
-                        .Select(ua => new DogDto { Name = ua.AnimalModel.Name })
-                        .ToList(),
+                        .Select(ua => new DogDto
+                        {
+                            Name = ((Dog)ua.AnimalModel).Name,
+                            Breed = ((Dog)ua.AnimalModel).Breed, // Exempel på hur man inkluderar ras
+                            Weight = ((Dog)ua.AnimalModel).Weight // Exempel på hur man inkluderar vikt
+                        }).ToList(),
                     Cats = user.UserAnimals
                         .Where(ua => ua.AnimalModel is Cat)
-                        .Select(ua => new CatDto { Name = ua.AnimalModel.Name, LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay })
-                        .ToList(),
+                        .Select(ua => new CatDto
+                        {
+                            Name = ((Cat)ua.AnimalModel).Name,
+                            LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay,
+                            Breed = ((Cat)ua.AnimalModel).Breed, // Lägg till fler attribut här
+                            Weight = ((Cat)ua.AnimalModel).Weight
+                        }).ToList(),
                     Birds = user.UserAnimals
                         .Where(ua => ua.AnimalModel is Bird)
-                        .Select(ua => new BirdDto { Name = ua.AnimalModel.Name, CanFly = ((Bird)ua.AnimalModel).CanFly })
-                        .ToList(),
+                        .Select(ua => new BirdDto
+                        {
+                            Name = ((Bird)ua.AnimalModel).Name,
+                            CanFly = ((Bird)ua.AnimalModel).CanFly,
+                            Color = ((Bird)ua.AnimalModel).Color // Lägg till fler attribut här
+                        }).ToList(),
                 });
 
                 _logger.LogInformation($"Retrieved {users.Count()} users with animals from the database.");
@@ -61,27 +74,7 @@ namespace Application.Queries.UserAnimal
 
 
 
-            //var users = await _repository.GetAllUsersWithAnimalsAsync();
 
-            //var userAnimalDtos = users.Select(user => new UserAnimalDto
-            //{
-            //    UserId = user.Id,
-            //    UserName = user.UserName,
-            //    Dogs = user.UserAnimals
-            //        .Where(ua => ua.AnimalModel is Dog)
-            //        .Select(ua => new DogDto { Name = ua.AnimalModel.Name })
-            //        .ToList(),
-            //    Cats = user.UserAnimals
-            //        .Where(ua => ua.AnimalModel is Cat)
-            //        .Select(ua => new CatDto { Name = ua.AnimalModel.Name, LikesToPlay = ((Cat)ua.AnimalModel).LikesToPlay })
-            //        .ToList(),
-            //    Birds = user.UserAnimals
-            //        .Where(ua => ua.AnimalModel is Bird)
-            //        .Select(ua => new BirdDto { Name = ua.AnimalModel.Name, CanFly = ((Bird)ua.AnimalModel).CanFly })
-            //        .ToList(),
-            //});
-
-            //return userAnimalDtos;
         }
     }
 }
