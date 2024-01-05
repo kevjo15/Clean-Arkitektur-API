@@ -3,6 +3,7 @@ using Application.Commands.UserAnimal.RemoveUserAnimal;
 using Application.Commands.UserAnimal.UpdateUserAnimal;
 using Application.Dtos;
 using Application.Queries.UserAnimal;
+using Application.Queries.UserAnimal.GetAllUserWithAnimal;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
