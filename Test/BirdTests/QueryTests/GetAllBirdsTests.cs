@@ -9,7 +9,7 @@ using Moq;
 namespace Test.BirdTests.QueryTest
 {
     [TestFixture]
-    public class GetAllBirdsTest
+    public class GetAllBirdsTests
     {
         private Mock<IBirdRepository> _birdRepositoryMock;
         private Mock<ILogger<GetAllBirdsQueryHandler>> _loggerMock;

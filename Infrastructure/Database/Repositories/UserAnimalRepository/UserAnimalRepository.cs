@@ -53,21 +53,28 @@ namespace Infrastructure.Database.Repositories.UserAnimalRepository
         }
         public async Task UpdateUserAnimalAsync(Guid userId, Guid currentAnimalModelId, Guid newAnimalModelId)
         {
-            // Ta bort den gamla relationen
-            var existingRelation = await _appDbContext.UserAnimals
-                .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AnimalModelId == currentAnimalModelId);
-
-            if (existingRelation != null)
+            try
             {
-                _appDbContext.UserAnimals.Remove(existingRelation);
+                var existingRelation = await _appDbContext.UserAnimals
+                    .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AnimalModelId == currentAnimalModelId);
+
+                if (existingRelation != null)
+                {
+                    _appDbContext.UserAnimals.Remove(existingRelation);
+                }
+
+                var newRelation = new UserAnimal { UserId = userId, AnimalModelId = newAnimalModelId };
+                _appDbContext.UserAnimals.Add(newRelation);
+
+                await _appDbContext.SaveChangesAsync();
             }
-
-            // Lägg till den nya relationen
-            var newRelation = new UserAnimal { UserId = userId, AnimalModelId = newAnimalModelId };
-            _appDbContext.UserAnimals.Add(newRelation);
-
-            await _appDbContext.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                // Kasta ett anpassat undantag eller logga felet
+                throw new InvalidOperationException("Failed to update user-animal relationship.", ex);
+            }
         }
+
 
 
     }

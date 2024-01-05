@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Application.Queries.UserAnimal;
+using Application.Queries.UserAnimal.GetAllUserWithAnimal;
 using Domain.Models;
 using Infrastructure.Database.Repositories.UserAnimalRepository;
 using Microsoft.Extensions.Logging;

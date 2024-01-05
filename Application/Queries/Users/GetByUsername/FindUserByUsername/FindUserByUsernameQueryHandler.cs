@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Users.GetByUsername
+namespace Application.Queries.Users.GetByUsername.FindUserByUsername
 {
     public class FindUserByUsernameQueryHandler : IRequestHandler<FindUserByUsernameQuery, User>
     {

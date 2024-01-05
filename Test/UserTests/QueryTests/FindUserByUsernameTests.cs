@@ -1,4 +1,4 @@
-﻿using Application.Queries.Users.GetByUsername;
+﻿using Application.Queries.Users.GetByUsername.FindUserByUsername;
 using Domain.Models;
 using Infrastructure.Database.Repositories.Users;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test.BirdTests.QueryTest
+namespace Test.UserTests.QueryTest
 {
     [TestFixture]
     public class FindUserByUsernameTests
