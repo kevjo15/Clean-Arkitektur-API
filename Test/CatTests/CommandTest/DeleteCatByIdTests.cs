@@ -54,8 +54,6 @@ namespace Test.CatTests.CommandTest
             // Act & Assert
             Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
         }
-
-
     }
 
 }
