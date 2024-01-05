@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Queries.Users.GetByUsername;
+using Application.Queries.Users.GetByUsername.FindUserByUsername;
 using Application.Validators;
 using Application.Validators.Dog;
 using Domain.Models;
