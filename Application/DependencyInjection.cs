@@ -1,4 +1,10 @@
 ﻿using FluentValidation;
+using Infrastructure.Database.Repositories.Birds;
+using Infrastructure.Database.Repositories.Cats;
+using Infrastructure.Database.Repositories.UserAnimalRepository;
+using Infrastructure.Database.Repositories.Users;
+using Infrastructure.Database.Repository;
+using Infrastructure.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -9,6 +15,12 @@ namespace Application
         {
             var assembly = typeof(DependencyInjection).Assembly;
             services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(assembly));
+            services.AddScoped<IDogRepository, DogRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserAnimalRepository, UserAnimalRepository>();
+            services.AddScoped<ICatRepository, CatRepository>();
+            services.AddScoped<IBirdRepository, BirdRepository>();
+
 
             services.AddValidatorsFromAssembly(assembly);
 

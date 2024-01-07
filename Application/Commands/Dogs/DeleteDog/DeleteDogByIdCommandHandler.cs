@@ -1,35 +1,55 @@
 ﻿using Domain.Models;
 using Infrastructure.Database;
+using Infrastructure.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Commands.Dogs.DeleteDog
 {
     public class DeleteDogByIdCommandHandler : IRequestHandler<DeleteDogByIdCommand, Dog>
     {
-        private readonly MockDatabase _mockDatabase;
+        private readonly IDogRepository _dogRepository;
+        private readonly ILogger<DeleteDogByIdCommandHandler> _logger;
 
-        public DeleteDogByIdCommandHandler(MockDatabase mockdatabase)
+        public DeleteDogByIdCommandHandler(IDogRepository dogRepository, ILogger<DeleteDogByIdCommandHandler> logger)
         {
-            _mockDatabase = mockdatabase;
+            _dogRepository = dogRepository;
+            _logger = logger;
         }
 
-        public Task<Dog> Handle(DeleteDogByIdCommand request, CancellationToken cancellationToken)
+        public async Task<Dog> Handle(DeleteDogByIdCommand request, CancellationToken cancellationToken)
         {
-            // Hitta hunden att ta bort från databasen
-            var dogToDelete = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == request.Id);
+            _logger.LogInformation($"Attempting to delete dog with ID: {request.Id}");
 
-            if (dogToDelete != null)
+            Dog dogToDelete = await _dogRepository.GetByIdAsync(request.Id);
+            if (dogToDelete == null)
             {
-                _mockDatabase.Dogs.Remove(dogToDelete);
-            }
-            else
-            {
-                // Throw an exception or handle the null case as needed for your application
-                throw new InvalidOperationException("No bird with the given ID was found.");
+                _logger.LogWarning($"Dog with ID: {request.Id} was not found.");
+                return null; // Eller hantera det på annat sätt beroende på ditt API:s design
             }
 
+            try
+            {
+                await _dogRepository.DeleteAsync(request.Id);
+                _logger.LogInformation($"Dog with ID: {request.Id} has been successfully deleted.");
+                return dogToDelete;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while deleting dog with ID: {request.Id}");
+                throw; // Kasta om undantaget för att det ska kunna hanteras uppåt i anropskedjan
+            }
 
-            return Task.FromResult(dogToDelete);
+            //Dog dogToDelete = await _dogRepository.GetByIdAsync(request.Id);
+
+            //if (dogToDelete == null)
+            //{
+            //    throw new InvalidOperationException("No dog with the given ID was found.");
+            //}
+
+            //await _dogRepository.DeleteAsync(request.Id);
+
+            //return (dogToDelete);
 
         }
 

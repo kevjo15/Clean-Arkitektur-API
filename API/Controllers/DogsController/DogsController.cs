@@ -4,9 +4,14 @@ using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Application.Queries.Dogs.GetAll;
 using Application.Queries.Dogs.GetById;
+using Application.Queries.Dogs.GetDogsByBreedAndWeight;
+using Application.Validators;
 using Application.Validators.Dog;
+using Domain.Models;
+using Infrastructure.Database;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +24,6 @@ namespace API.Controllers.DogsController
         internal readonly IMediator _mediator;
         private readonly DogValidator _dogValidator;
         private readonly GuidValidator _guidValidator;
-
         public DogsController(IMediator mediator, DogValidator dogValidator, GuidValidator guidValidator)
         {
             _mediator = mediator;
@@ -32,8 +36,19 @@ namespace API.Controllers.DogsController
         [Route("getAllDogs")]
         public async Task<IActionResult> GetAllDogs()
         {
-            return Ok(await _mediator.Send(new GetAllDogsQuery()));
-            //return Ok("GET ALL DOGS");
+            try
+            {
+                var query = new GetAllDogsQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+                //return Ok(await _mediator.Send(new GetAllDogsQuery()));
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         // Get a dog by Id
@@ -41,19 +56,25 @@ namespace API.Controllers.DogsController
         [Route("getDogById/{dogId}")]
         public async Task<IActionResult> GetDogById(Guid dogId)
         {
-            var validatedDog = _guidValidator.Validate(dogId);
-            //Error handling
-            if (!validatedDog.IsValid)
+            var validationResult = _guidValidator.Validate(dogId);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
+                return BadRequest(validationResult.Errors.ConvertAll(error => error.ErrorMessage));
             }
+
             try
             {
-                return Ok(await _mediator.Send(new GetDogByIdQuery(dogId)));
+                var result = await _mediator.Send(new GetDogByIdQuery(dogId));
+                if (result == null)
+                {
+                    return NotFound($"Hunden med ID {dogId} hittades inte.");
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                // Logga felet här
+                return StatusCode(500, "Ett internt serverfel inträffade: " + ex.Message);
             }
         }
 
@@ -69,7 +90,6 @@ namespace API.Controllers.DogsController
             if (!validatedDog.IsValid)
             {
                 return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
-
             }
 
             try
@@ -88,16 +108,12 @@ namespace API.Controllers.DogsController
         [Route("updateDog/{updatedDogId}")]
         public async Task<IActionResult> UpdateDog([FromBody] DogDto updatedDog, Guid updatedDogId)
         {
-            var validatedDog = _dogValidator.Validate(updatedDog);
-            var guidValidator = _guidValidator.Validate(updatedDogId);
+            var dogValidationResult = _dogValidator.Validate(updatedDog);
+            var guidValidationResult = _guidValidator.Validate(updatedDogId);
 
-            if (!validatedDog.IsValid)
+            if (!dogValidationResult.IsValid || !guidValidationResult.IsValid)
             {
-                return BadRequest(validatedDog.Errors.ConvertAll(errors => errors.ErrorMessage));
-            }
-            if (!guidValidator.IsValid)
-            {
-                return BadRequest(guidValidator.Errors.ConvertAll(errors => errors.ErrorMessage));
+                return BadRequest("Ogiltig data för uppdatering.");
             }
             try
             {
@@ -115,6 +131,12 @@ namespace API.Controllers.DogsController
         [Route("deletedog/{Id}")]
         public async Task<IActionResult> DeleteDog(Guid Id)
         {
+            var guidValidationResult = _guidValidator.Validate(Id);
+            if (!guidValidationResult.IsValid)
+            {
+                return BadRequest("Ogiltigt Dog ID angivet.");
+            }
+
             var command = new DeleteDogByIdCommand(Id);
             var result = await _mediator.Send(command);
 
@@ -126,5 +148,23 @@ namespace API.Controllers.DogsController
             return NotFound("Dog Finns inte med i listan"); // Om hunden inte hittades, returnera NotFound
 
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetDogs([FromQuery] string? breed, [FromQuery] int? weight)
+        {
+            try
+            {
+                // Skicka parametrar till en enda query
+                var query = new GetDogsByBreedAndWeightQuery(breed, weight);
+                var dogs = await _mediator.Send(query);
+                return Ok(dogs);
+            }
+            catch (Exception ex)
+            {
+                // Logga och hantera undantaget på lämpligt sätt
+                return StatusCode(500, "Ett internt serverfel inträffade: " + ex.Message);
+            }
+        }
+
     }
 }
