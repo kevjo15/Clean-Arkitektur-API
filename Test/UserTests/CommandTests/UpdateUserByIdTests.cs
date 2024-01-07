@@ -49,7 +49,7 @@ namespace Test.UserTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("NewUsername", result.UserName);
+            Assert.That(result.UserName, Is.EqualTo("NewUsername"));
             _userRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<User>()), Times.Once);
         }
 

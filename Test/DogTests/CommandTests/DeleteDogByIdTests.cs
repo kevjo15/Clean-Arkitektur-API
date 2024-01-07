@@ -42,7 +42,7 @@ namespace Test.DogTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(dogId, result.Id);
+            Assert.That(result.Id, Is.EqualTo(dogId));
             // Kontrollera andra relevanta delar av resultaten
         }
 

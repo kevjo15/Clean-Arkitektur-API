@@ -41,8 +41,8 @@ namespace Test.UserTests.QueryTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.Id);
-            Assert.AreEqual("JohnDoe", result.UserName);
+            Assert.That(result.Id, Is.EqualTo(userId));
+            Assert.That(result.UserName, Is.EqualTo("JohnDoe"));
         }
 
         [Test]

@@ -42,8 +42,8 @@ namespace Test.CatTests.QueryTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(catId, result.Id);
-            Assert.AreEqual("Whiskers", result.Name);
+            Assert.That(result.Id, Is.EqualTo(catId));
+            Assert.That(result.Name, Is.EqualTo("Whiskers"));
         }
 
         [Test]

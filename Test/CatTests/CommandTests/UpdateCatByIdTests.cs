@@ -28,7 +28,7 @@ namespace Test.CatTests.CommandTest
             var catId = Guid.NewGuid();
             var existingCat = new Cat { Id = catId, Name = "OldName", LikesToPlay = true };
             var updatedCatDto = new CatDto { Name = "NewName", LikesToPlay = false };
-            var command = new UpdateCatByIdCommand(updatedCatDto ,catId);
+            var command = new UpdateCatByIdCommand(updatedCatDto, catId);
 
             _catRepositoryMock.Setup(repo => repo.GetByIdAsync(catId)).ReturnsAsync(existingCat);
             _catRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<Cat>())).Returns(Task.CompletedTask);
@@ -38,8 +38,8 @@ namespace Test.CatTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(updatedCatDto.Name, result.Name);
-            Assert.AreEqual(updatedCatDto.LikesToPlay, result.LikesToPlay);
+            Assert.That(result.Name, Is.EqualTo(updatedCatDto.Name));
+            Assert.That(result.LikesToPlay, Is.EqualTo(updatedCatDto.LikesToPlay));
         }
         [Test]
         public void Handle_UpdateThrowsException_ThrowsException()

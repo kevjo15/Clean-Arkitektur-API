@@ -46,7 +46,7 @@ namespace Test.UserAnimalTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.UserId);
+            Assert.That(result.UserId, Is.EqualTo(userId));
             // Kontrollera andra relevanta delar av resultaten
         }
         [Test]

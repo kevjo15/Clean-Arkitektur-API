@@ -116,7 +116,7 @@ namespace API.Controllers.UserAnimalController
         [HttpPut("{userId}/{currentAnimalModelId}/{newAnimalModelId}")]
         public async Task<IActionResult> UpdateUserAnimal(Guid userId, Guid currentAnimalModelId, Guid newAnimalModelId)
         {
-                       try
+            try
             {
                 var userValidationResult = _guidValidator.Validate(userId);
                 var currentAnimalValidationResult = _guidValidator.Validate(currentAnimalModelId);

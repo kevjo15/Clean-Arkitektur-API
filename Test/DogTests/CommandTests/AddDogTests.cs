@@ -45,9 +45,9 @@ namespace Test.DogTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(newDogDto.Name, result.Name);
-            Assert.AreEqual(newDogDto.Breed, result.Breed);
-            Assert.AreEqual(newDogDto.Weight, result.Weight);
+            Assert.That(result.Name, Is.EqualTo(newDogDto.Name));
+            Assert.That(result.Breed, Is.EqualTo(newDogDto.Breed));
+            Assert.That(result.Weight, Is.EqualTo(newDogDto.Weight));
         }
 
         [Test]

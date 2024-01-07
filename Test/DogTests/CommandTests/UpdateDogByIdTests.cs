@@ -41,9 +41,9 @@ namespace Test.DogTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(updatedDogDto.Name, result.Name);
-            Assert.AreEqual(updatedDogDto.Breed, result.Breed);
-            Assert.AreEqual(updatedDogDto.Weight, result.Weight);
+            Assert.That(result.Name, Is.EqualTo(updatedDogDto.Name));
+            Assert.That(result.Breed, Is.EqualTo(updatedDogDto.Breed));
+            Assert.That(result.Weight, Is.EqualTo(updatedDogDto.Weight));
         }
         [Test]
         public void Handle_UpdateThrowsException_ThrowsException()

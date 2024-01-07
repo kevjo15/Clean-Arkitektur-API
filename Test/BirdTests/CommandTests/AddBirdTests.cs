@@ -40,9 +40,9 @@ namespace Test.BirdTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(newBirdDto.Name, result.Name);
-            Assert.AreEqual(newBirdDto.Color, result.Color);
-            Assert.AreEqual(newBirdDto.CanFly, result.CanFly);
+            Assert.That(result.Name, Is.EqualTo(newBirdDto.Name));
+            Assert.That(result.Color, Is.EqualTo(newBirdDto.Color));
+            Assert.That(result.CanFly, Is.EqualTo(newBirdDto.CanFly));
         }
 
 

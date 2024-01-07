@@ -41,7 +41,7 @@ namespace Test.UserTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(userId, result.Id);
+            Assert.That(result.Id, Is.EqualTo(userId));
             // Kontrollera andra relevanta delar av resultaten
         }
         [Test]

@@ -42,9 +42,9 @@ namespace Test.CatTests.QueryTest
 
             // Assert
             Assert.IsNotEmpty(result);
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual(breed, result.First().Breed);
-            Assert.AreEqual(weight, result.First().Weight);
+            Assert.That(result.Count(), Is.EqualTo(1));
+            Assert.That(result.First().Breed, Is.EqualTo(breed));
+            Assert.That(result.First().Weight, Is.EqualTo(weight));
         }
 
         [Test]

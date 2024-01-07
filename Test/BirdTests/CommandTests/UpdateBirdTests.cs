@@ -40,9 +40,9 @@ namespace Test.BirdTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(updatedBird.Name, result.Name);
-            Assert.AreEqual(updatedBird.CanFly, result.CanFly);
-            Assert.AreEqual(updatedBird.Color, result.Color);
+            Assert.That(result.Name, Is.EqualTo(updatedBird.Name));
+            Assert.That(result.CanFly, Is.EqualTo(updatedBird.CanFly));
+            Assert.That(result.Color, Is.EqualTo(updatedBird.Color));
         }
         [Test]
         public void Handle_UpdateThrowsException_ThrowsException()
@@ -51,7 +51,7 @@ namespace Test.BirdTests.CommandTest
             var birdId = Guid.NewGuid();
             var existingBird = new Bird { Id = birdId, Name = "OldName", CanFly = true, Color = "Red" };
             var updatedBirdDto = new BirdDto { Name = "NewName", CanFly = false, Color = "Blue" };
-            var command = new UpdateBirdByIdCommand(updatedBirdDto,birdId );
+            var command = new UpdateBirdByIdCommand(updatedBirdDto, birdId);
 
             _birdRepositoryMock.Setup(repo => repo.GetByIdAsync(birdId)).ReturnsAsync(existingBird);
             _birdRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<Bird>())).ThrowsAsync(new InvalidOperationException("Test Exception"));

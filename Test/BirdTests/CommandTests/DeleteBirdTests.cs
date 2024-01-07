@@ -47,7 +47,7 @@ namespace Test.BirdTests.CommandTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(birdId, result.Id);
+            Assert.That(result.Id, Is.EqualTo(birdId));
             // Kontrollera andra relevanta delar av resultaten
         }
         [Test]

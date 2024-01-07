@@ -48,9 +48,9 @@ namespace Test.CatTests.CommandTest
             // Assert
             Assert.IsNotNull(result);
             //Assert.AreEqual(createdCat.Id, result.Id);
-            Assert.AreEqual(newCatDto.Name, result.Name);
-            Assert.AreEqual(newCatDto.Breed, result.Breed);
-            Assert.AreEqual(newCatDto.Weight, result.Weight);
+            Assert.That(result.Name, Is.EqualTo(newCatDto.Name));
+            Assert.That(result.Breed, Is.EqualTo(newCatDto.Breed));
+            Assert.That(result.Weight, Is.EqualTo(newCatDto.Weight));
         }
 
         [Test]

@@ -38,8 +38,8 @@ namespace Test.DogTests.QueryTest
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(dogId, result.Id);
-            Assert.AreEqual("Rex", result.Name);
+            Assert.That(result.Id, Is.EqualTo(dogId));
+            Assert.That(result.Name, Is.EqualTo("Rex"));
         }
         // GetDogById
         [Test]

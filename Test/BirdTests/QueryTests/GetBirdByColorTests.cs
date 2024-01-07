@@ -42,7 +42,7 @@ namespace Test.BirdTests.QueryTest
             // Assert
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result);
-            Assert.AreEqual("Cardinal", result[0].Name);
+            Assert.That(result[0].Name, Is.EqualTo("Cardinal"));
             _birdRepositoryMock.Verify(repo => repo.GetBirdByColorAsync(color), Times.Once);
         }
 
